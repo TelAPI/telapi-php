@@ -1,0 +1,108 @@
+<?php
+
+/**
+ * 
+ * How to buy a phone number with TelAPI and assign it to your account!
+ * 
+ * --------------------------------------------------------------------------------
+ * 
+ * @category  TelApi Wrapper
+ * @package   TelApi
+ * @author    Nevio Vesic <nevio@telapi.com>
+ * @license   http://creativecommons.org/licenses/MIT/ MIT
+ * @copyright (2012) TelTech Systems, Inc. <info@telapi.com>
+ */
+
+
+# A 36 character long AccountSid is always required. It can be described
+# as the username for your account
+$account_sid = '{AccountSid}';
+
+# A 34 character long AuthToken is always required. It can be described
+# as your account's password
+$auth_token  = '{AuthToken}';
+
+# If you want the response decoded into an Array instead of an Object, set
+# response_to_array to TRUE otherwise, leave it as-is
+$response_to_array = false;
+
+
+# First we must import the actual TelAPI library
+require_once '../library/TelApi.php';
+
+# Now what we need to do is to instanciate library and set required options
+$telapi = TelApi::getInstance();
+
+# This is a best approach on how to setup multiple options recursively
+# Take note that you cannot set non-existing options
+$telapi -> setOptions(array( 
+    'account_sid'       => $account_sid, 
+    'auth_token'        => $auth_token,
+    'response_to_array' => $response_to_array
+));
+
+# If an error occurs, TelApi_Exception will be raised. Due to same logic
+# it's best to always do try/catch block while doing any querying against TelAPI
+try {
+    
+    # NOTICE: THIS IS THE AUTOMATED PHONE NUMBER PURCHASE SCRIPT
+    
+    # STEP ONE: GET THE AVAILABLE PHONE NUMBER SID
+    
+    # First, you must lookup the phone number you wish to buy.
+    # You can do that by looking at the AvailablePhoneNumber resource:
+    
+    # Country Code of phone number. 2 digit country code required. 
+    # Always use uppercase letters such as 'US' instead of 'us'
+    $country_code = strtoupper('US');
+    
+    # Type of the phone number. At the moment we only support Local phone numbers. 
+    # Soon we'll support Tollfree numbers as well.
+    $phone_number_type = 'Local';
+    
+    # Way how you can reach to available phone numbers page limited to 1 records per page.
+    # array( 'available_phone_numbers', $country_code, $phone_number_type ) will create:
+    # AvailablePhoneNumbers/US/Local.json for you!
+    $available_numbers = $telapi->get(array( 'available_phone_numbers', $country_code, $phone_number_type ), array(
+        'PageSize' => 1
+    ));
+    
+    # This will be or NULL or E.164 based phone number from TelAPI
+    $available_phone_number = null;
+    
+    # Because we have multiple available phone numbers in list if we choose so
+    # we cannot access numbers as in instance mode ( $instance -> sid ) and instead
+    # we need to loop thru numbers, or in this case, the AvailablePhoneNumber resource,
+    # fetch first instance, access phone number value and then break.
+    foreach($available_numbers->items() as $available_number) {
+        $available_phone_number = $available_number->phone_number;
+        break;
+    }
+    
+    # In case there's no available_phone_number (if it's null) throw LogicException
+    # LogicException is native to PHP so you don't have to worry about if that's part of
+    # TelAPI or not.
+    if(is_null($available_phone_number)) {
+        throw new LogicException(
+            "Available phone number cannot be found, and therefore, purchase of phone number cannot continue"
+        );
+    }
+    
+    # STEP TWO: REGISTER THE NEW PHONE NUMBER
+    
+    # Now what we need to do is to register the phone number by creating a new 
+    # call to incoming_phone_numbers with the PhoneNumber POST parameter
+    # If phone number is not available you'll see the ('Invalid Phone Number') error
+    $incoming_numbers = $telapi->create('incoming_phone_numbers', array(
+        'PhoneNumber' => $available_phone_number
+    ));
+
+    # Iteration over incoming phone numbers
+    foreach($incoming_numbers->items() as $number) {
+        print_r($number);
+    }
+    
+} catch (Exception $e) {
+    echo "Error occured: " . $e->getMessage() . "\n";
+    exit;
+}
