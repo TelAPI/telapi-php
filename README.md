@@ -16,7 +16,7 @@ Access terminal and run the following code:
 ```shell
   $ cd ~
   $ git clone https://github.com/TelAPI/telapi-php.git
-  $ cd telapi-php-wrapper
+  $ cd telapi-php
 ```
 
 #### Via Download
