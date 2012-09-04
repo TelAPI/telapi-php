@@ -85,7 +85,7 @@ $package->setOptions(
 $package->setPackage('TelAPI');
 $package->setSummary('PHP helper library for TelAPI');
 $package->setDescription($description);
-$package->setChannel('nevio.pear.telapi.com');
+$package->setChannel('pear.telapi.com');
 $package->setPackageType('php');
 $package->setLicense(
     'MIT License',
