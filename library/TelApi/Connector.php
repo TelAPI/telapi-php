@@ -84,7 +84,7 @@ class TelApi_Connector
                 );
             }
         }
-
+        
         $this->_decodeJSON();
     }
     

@@ -1,5 +1,13 @@
 <?php
 
+if( floatval(phpversion()) < 5.3) {
+    trigger_error(sprintf(
+        "Your PHP version %s is not valid. In order to run TelAPI helper you will need to have at least PHP 5.3 or above.", 
+         phpversion() 
+    ));
+}
+
+
 /** @see TelApi_Exception */
 require_once 'TelApi/Exception.php';
 

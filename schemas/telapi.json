@@ -25,107 +25,192 @@
     },
     
     "inboundxml" : {
-        "verbs" : {
-            "Response" : {
-                "attributes" : [],
-                "nesting"    : ["Say", "Play", "Gather", "Record", "Dial", "Hangup", "Redirect", "Reject", "Pause", "Sms"],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/response/",
-                "blank"      : false
-            },
-            "Say" : {
-                "attributes" : ["voice", "loop"],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/say/",
-                "blank"      : false
-            },
-            "Play" : {
-                "attributes" : ["loop"],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/play/",
-                "blank"      : false
-            },
-            "Gather" : {
-                "attributes" : [
-                    "action", "method", "finishOnKey", "timeout", "numDigits"
+        "verbs": {
+            "Response": {
+                "attributes": [],
+                "nesting": [
+                    "Say",
+                    "Play",
+                    "Gather",
+                    "Record",
+                    "Dial",
+                    "Hangup",
+                    "Redirect",
+                    "Reject",
+                    "Pause",
+                    "Sms"
                 ],
-                "nesting"    : ["Say", "Play", "Pause"],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/gather/",
-                "blank"      : true
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/response/",
+                "blank": false
             },
-            "Record" : {
-                "attributes" : [
-                    "action", "method", "timeout", "finishOnKey", "transcribe",
-                    "transcribeCallback", "playBeep", "bothLegs", "fileFormat"
+            "Say": {
+                "attributes": [
+                    "voice",
+                    "loop"
                 ],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/record/",
-                "blank"      : true
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/say/",
+                "blank": false
             },
-            "Dial" : {
-                "attributes" : [
-                    "action", "method", "timeout", "hangupOnStar", "timeLimit",
-                    "callerId", "hideCallerId", "callerName", "dialMusic",
-                    "callbackUrl", "callbackMethod", "confirmSound", "digitsMatch",
-                    "straightToVm", "heartbeatUrl", "heartbeatMethod", "forwardedFrom"
+            "Play": {
+                "attributes": [
+                    "loop"
                 ],
-                "nesting"    : ["Number", "Conference", "Sip"],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/dial/",
-                "blank"      : false
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/play/",
+                "blank": false
             },
-            "Number" : {
-                "attributes" : ["sendDigits", "method", "url"],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/dial/number/",
-                "blank"      : false
-            },
-            "Conference" : {
-                "attributes" : [
-                    "muted", "beep", "startConferenceOnEnter", "endConferenceOnEnter",
-                    "waitUrl", "waitMethod", "hangupOnStar", "callbackUrl", "method",
-                    "waitSound", "waitSoundMethod", "digitsMatch", "stayAlone"
+            "Gather": {
+                "attributes": [
+                    "action",
+                    "method",
+                    "finishOnKey",
+                    "timeout",
+                    "numDigits"
                 ],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/dial/conference/",
-                "blank"      : false
+                "nesting": [
+                    "Say",
+                    "Play",
+                    "Pause"
+                ],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/gather/",
+                "blank": true
             },
-            "Sip" : {
-                "attributes" : ["action", "method"],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/dial/sip/",
-                "blank"      : false
+            "Record": {
+                "attributes": [
+                    "action",
+                    "method",
+                    "timeout",
+                    "finishOnKey",
+                    "maxLength",
+                    "transcribe",
+                    "transcribeCallback",
+                    "playBeep",
+                    "bothLegs",
+                    "fileFormat"
+                ],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/record/",
+                "blank": true
             },
-            "Hangup" : {
-                "attributes" : ["schedule"],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/hangup/",
-                "blank"      : false
+            "GetSpeech": {
+                "attributes": [
+                    "grammar", "action", "method", "timeout", "playBeep"
+                ],
+                "nesting": [
+                    "Say", "Play", "Pause"
+                ],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/getspeech/",
+                "blank": false
             },
-            "Redirect" : {
-                "attributes" : ["method"],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/redirect/",
-                "blank"      : true
+            "Dial": {
+                "attributes": [
+                    "action",
+                    "method",
+                    "timeout",
+                    "hangupOnStar",
+                    "timeLimit",
+                    "callerId",
+                    "hideCallerId",
+                    "dialMusic",
+                    "callbackUrl",
+                    "callbackMethod",
+                    "confirmSound",
+                    "digitsMatch",
+                    "straightToVm",
+                    "heartbeatUrl",
+                    "heartbeatMethod",
+                    "forwardedFrom"
+                ],
+                "nesting": [
+                    "Number",
+                    "Conference",
+                    "Sip"
+                ],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/dial/",
+                "blank": false
             },
-            "Reject" : {
-                "attributes" : ["reason"],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/reject/",
-                "blank"      : true
+            "Number": {
+                "attributes": [
+                    "sendDigits"
+                ],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/dial/number/",
+                "blank": false
             },
-            "Pause" : {
-                "attributes" : ["length"],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/voice/pause/",
-                "blank"      : true
+            "Conference": {
+                "attributes": [
+                    "muted",
+                    "beep",
+                    "startConferenceOnEnter",
+                    "endConferenceOnEnter",
+                    "maxParticipants",
+                    "waitUrl",
+                    "waitMethod",
+                    "hangupOnStar",
+                    "callbackUrl",
+                    "waitSound",
+                    "waitSoundMethod",
+                    "digitsMatch",
+                    "stayAlone"
+                ],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/dial/conference/",
+                "blank": false
             },
-            "Sms" : {
-                "attributes" : [
-                    "to", "from", "action", "method", "statusCallback", 
+            "Sip": {
+                "attributes": [
+                    "action",
+                    "method"
+                ],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/dial/sip/",
+                "blank": false
+            },
+            "Hangup": {
+                "attributes": [
+                    "schedule"
+                ],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/hangup/",
+                "blank": false
+            },
+            "Redirect": {
+                "attributes": [
+                    "method"
+                ],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/redirect/",
+                "blank": true
+            },
+            "Reject": {
+                "attributes": [
+                    "reason"
+                ],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/reject/",
+                "blank": true
+            },
+            "Pause": {
+                "attributes": [
+                    "length"
+                ],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/pause/",
+                "blank": true
+            },
+            "Sms": {
+                "attributes": [
+                    "to",
+                    "from",
+                    "action",
+                    "method",
+                    "statusCallback",
                     "statusCallbackMethod"
                 ],
-                "nesting"    : [],
-                "docs_url"   : "http://www.telapi.com/docs/api/inboundxml/sms/sms/",
-                "blank"      : false
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/sms/sms/",
+                "blank": false
             }
         }
     }
