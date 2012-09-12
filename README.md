@@ -1,4 +1,5 @@
-## TelAPI-PHP
+TelAPI-PHP
+==========
 
 This PHP library is an open source tool built to simplify interaction with the [TelAPI](http://telapi.com) telephony platform. TelAPI makes adding voice and SMS to applications fun and easy.
 
