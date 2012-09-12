@@ -1,13 +1,13 @@
 ## Run Instructions
 
-In order to run files located under this path you will need to follow few easy steps. Runing them is very easy :) 
+In order to run files located under this path you will need to follow a few easy steps. Runing them is very easy :) 
 
-Once you choose desired example you will need to:
+Once you choose the desired example you will need to:
 
 
 #### Step 1 - Change credentials
 
-Every example file contains following block of the code:
+Every example file contains the following block of the code:
 
 ```php
 # A 36 character long AccountSid is always required. It can be described
@@ -19,12 +19,12 @@ $account_sid = '{AccountSid}';
 $auth_token  = '{AuthToken}';
 ```
 
-`{AccountSid}` and `{AuthToken}` must be changed with real credentials which you can find under [TelAPI dashboard](https://www.telapi.com/dashboard)
+`{AccountSid}` and `{AuthToken}` must be changed with real credentials which you can find at [TelAPI dashboard](https://www.telapi.com/dashboard)
 
 
 #### Step 2 - Change parameters ( if needed )
 
-In case that choosen example is [Send SMS](https://github.com/TelAPI/telapi-php/blob/master/examples/send-sms.php) you will need to update following block of the code:
+if you are trying to run the [Send SMS](https://github.com/TelAPI/telapi-php/blob/master/examples/send-sms.php) example you will need to update following block of the code:
 
 ```php
 $sms_message = $telapi->create('sms_messages', array(
@@ -34,12 +34,12 @@ $sms_message = $telapi->create('sms_messages', array(
 ));
 ```
 
-where `From` and `To` must be real numbers.
+where `From` and `To` must be valid phone numbers.
     
     
 #### Step 3 - Run the code!
 
-There are many ways how code can be run. We will show you here how to run it under the terminal:
+There are many ways to run the example code. To run it in terminal, perform the following commands:
 
 **You must have PHP 5.3 or greater installed in order to run any example!**
 

@@ -1,6 +1,6 @@
 ## TelAPI PHP Wrapper
 
-This TelAPI PHP wrapper is an open source tool built for easy access to the [TelAPI.com](http://telapi.com) API infrastructure. TelAPI is a powerful cloud communications API built to enable your apps to send and receive SMS messages and phone calls — all while controlling the call flow. Some features are conferencing, phone calls, text-to-speech, recordings, transcriptions and much more.
+This TelAPI PHP wrapper is an open source tool built to simplify interaction with the [TelAPI.com](http://telapi.com) API infrastructure. TelAPI is a powerful cloud communications API built to enable your apps to send and receive SMS messages and phone calls — all while controlling the call flow. Some features are conferencing, phone calls, text-to-speech, recordings, transcriptions and much more.
 
 For more information about TelAPI, please visit: [telapi.com/features](http://www.telapi.com/features)
 
