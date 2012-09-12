@@ -7,7 +7,11 @@ For more information about TelAPI, please visit:  [telapi.com/features](http://w
 
 ---
 
-### Installation
+Installation
+============
+
+#### Via Pear
+
 At the moment we don't support the PEAR package but will in the near future!
 
 ##### PHP 5.2+ Required (5.3+ recommended)
@@ -35,31 +39,14 @@ Once the .zip download is complete, extract it and get started with the examples
 
 ---
 
+Usage
+======
 
-### REST Introduction
+### REST
 
-Everything you need to know to use the TelAPI Wrapper can be found in the [/examples directory](https://github.com/telapi/telapi-php/tree/master/examples).
-In each example simply replace `{AccountSid}` and `{AuthToken}` with the values from your [TelAPI Account Dashboard](https://www.telapi.com/dashboard/).
+[TelAPI REST API documenatation](http://www.telapi.com/docs/api/rest/) 
 
-##### Available REST API resources
-
-* **accounts**                  - Fetch or set account details
-* **notifications**             - View notifications, such as application errors
-* **recordings**                - List recordings
-* **sms_messages**              - Send or view SMS messages
-* **transcriptions**            - View or submit a recording for transcribing to text
-* **calls**                     - View or place calls
-* **carrier**                   - Lookup the carrier for a number
-* **cnam**                      - Look up the caller ID for a number
-* **incoming_phone_numbers**    - List or purchase a phone number
-* **available_phone_numbers**   - Search for available phone numbers
-* **conferences**               - List conference details
-* **fraud**                     - Manage destinations and grant/rewoke priviledge access priviledges
-* **applications**              - Automate common number configurations for one or many phone numbers
-
-
-
-##### Example usage - Sending an SMS
+##### Send SMS Example
 
 ```php
 <?php
@@ -82,20 +69,11 @@ $sms_message = $telapi->create('sms_messages', array(
 print_r($sms_message);
 ```
 
+### InboundXML
 
-For more information such as which properties are available for existing resources, please visit [TelAPI REST Documenatation](http://www.telapi.com/docs/api/rest/)
+InboundXML is an XML dialect which enables you to control phone call flow. For more information please visit the [TelAPI InboundXML documenatation](http://www.telapi.com/docs/api/inboundxml/)
 
-
-
-----
-
-
-
-### InboundXML Introduction
-
-InboundXML is an XML dialect which enables you to control your phone call flow. You can do things such as start a conference, speak some text, or start recording a call. For more information please visit [TelAPI InboundXML documenatation](http://www.telapi.com/docs/api/inboundxml/)
-
-##### Example usage
+##### <Say> Example
 
 ```php
 <?php
@@ -119,3 +97,5 @@ will render
 ```
 
 Just host that PHP file somewhere, buy a phone number in your [TelAPI Account Dashboard](https://www.telapi.com/dashboard/) and assign the URL of that PHP page to your new number. Whenever you dial that number, the InboundXML this page generates will be executed and you'll hear our text-to-speech engine say welcome.
+
+---
