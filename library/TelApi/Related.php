@@ -70,7 +70,8 @@ abstract class TelApi_Related
         'carrier'                 => 'Carrier',
         'cnam'                    => 'CNAM',
         'applications'            => 'Applications',
-        'fraud'                   => 'Fraud'
+        'fraud'                   => 'Fraud',
+        'usages'                  => 'Usages'
     );
     
     

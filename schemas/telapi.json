@@ -14,7 +14,8 @@
             "available_phone_numbers" : "AvailablePhoneNumbers",
             "conferences"             : "Conferences",
             "applications"            : "Applications",
-	    "fraud"                   : "Fraud"
+	    "fraud"                   : "Fraud",
+	    "usages"                  : "Usages"
         },
 
         "pagination" : [

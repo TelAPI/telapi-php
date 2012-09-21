@@ -173,13 +173,21 @@ class TelApi_Connector
         $result = json_decode(trim($this->curl_data['exec']), $this->response_association);
         
         $error = '';
-        
+       
+
         # JSON will be validated only if you use PHP 5 >= 5.3.0
-        if(function_exists('json_last_error')) {
-            $error  = $this->_validateJSON();
-        }
+	if( floatval(phpversion()) < 5.3) {
+            if(function_exists('json_last_error')) {
+                
+                $error  = $this->_validateJSON();
+                
+                if (!empty($error)) {
+                    throw new TelApi_Exception('JSON Error: '.$error);
+                }
+            }
+	}
         
-        if (!empty($error)) throw new TelApi_Exception('JSON Error: '.$error);
+        
         $this->curl_data['response'] = $result;
     }
     
