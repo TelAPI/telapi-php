@@ -28,7 +28,7 @@ abstract class TelApi_Related
     CONST API_URL              = 'https://api.telapi.com/';
     
     /** BASE TELAPI API VERSION */
-    CONST API_VERSION          = '2011-07-01';
+    CONST API_VERSION          = 'v1';
     
     
     /** 
@@ -37,6 +37,14 @@ abstract class TelApi_Related
      */
     CONST API_START_COMPONENT  = 'Accounts';
     
+    /**
+     * Available TelAPI REST endpoint versions are:
+     * 
+     * @var array
+     */
+    protected $_availableVersions = array( '2011-07-01', 'v1' );
+
+
     /**
      * All available options which can be set for the wrapper itself.
      * All the listed options are required as well.
@@ -47,7 +55,8 @@ abstract class TelApi_Related
         'account_sid'       => null,
         'auth_token'        => null,
         'wrapper_type'      => self::WRAPPER_JSON,
-        'response_to_array' => false, 
+        'response_to_array' => false,
+        'api_version'       => self::API_VERSION
     );
     
     
@@ -202,7 +211,8 @@ abstract class TelApi_Related
      * @throws TelApi_Exception 
      */
     private function _buildBaseUrl() {
-        $return_url = self::API_URL . self::API_VERSION . '/';
+
+        $return_url = self::API_URL . $this->_getBaseVersion() . '/';
         
         if(is_null($this->option('account_sid'))) {
             throw new TelApi_Exception(
@@ -212,10 +222,28 @@ abstract class TelApi_Related
         }
         
         $return_url .= self::API_START_COMPONENT . '/' . $this->option('account_sid') . '/';
-        
         return $return_url;
     }
     
+    /**
+     * Get base version of the TelAPI REST API endpoint.
+     * 
+     * @return string
+     * @throws TelApi_Exception  If invalid api_version applied
+     */
+    private function _getBaseVersion() {
+        $base_version = strtolower($this->option('api_version'));
+        
+        if(!in_array($base_version, $this->_availableVersions)) {
+            $base_versions = implode(', ', $this->_availableVersions);
+            throw new TelApi_Exception("Defined version '{$base_version}' does not exist. Please use one of following versions: '{$base_versions}'");
+        }
+        
+        $this->setOption('api_version', $base_version);
+        return $this->option('api_version');
+    }
+
+
     
     /**
      * This will build URL of TelAPI wrapper after the AccountSid with or without
