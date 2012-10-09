@@ -122,7 +122,7 @@ class TelApi_Schemas
     }
     
     /**
-     * Check whenever attribute is in paging property or not
+     * Check whenever attribute is or is not in paging property
      * Used to extract paging properties from the rest of the properties
      * 
      * @param  string $paging_property
@@ -205,7 +205,7 @@ class TelApi_Schemas
     }
     
     /**
-     * Check if an attribute name if valid for a InboundXML element
+     * Check if an attribute name is valid for a InboundXML element
      * 
      * @param  string  $attribute
      * @param  string  $verb

@@ -26,14 +26,13 @@ $auth_token  = '{AuthToken}';
 # response_to_array to TRUE otherwise, leave it as-is
 $response_to_array = false;
 
-
 # First we must import the actual TelAPI library
 require_once '../library/TelApi.php';
 
-# Now what we need to do is to instanciate library and set required options
+# Now what we need to do is instantiate the library and set the required options defined above
 $telapi = TelApi::getInstance();
 
-# This is a best approach on how to setup multiple options recursively
+# This is the best approach to setting multiple options recursively
 # Take note that you cannot set non-existing options
 $telapi -> setOptions(array( 
     'account_sid'       => $account_sid, 
@@ -41,11 +40,11 @@ $telapi -> setOptions(array(
     'response_to_array' => $response_to_array
 ));
 
-# If an error occurs, TelApi_Exception will be raised. Due to same logic
-# it's best to always do try/catch block while doing any querying against TelAPI
+# If an error occurs, TelApi_Exception will be raised. Due to this,
+# it's a good idea to always do try/catch blocks while querying TelAPI
 try {
     
-    # NOTICE: THIS IS THE AUTOMATED PHONE NUMBER PURCHASE SCRIPT
+    # NOTICE: THIS IS AN AUTOMATED PHONE NUMBER PURCHASING SCRIPT
     
     # STEP ONE: GET THE AVAILABLE PHONE NUMBER SID
     
@@ -56,21 +55,21 @@ try {
     # Always use uppercase letters such as 'US' instead of 'us'
     $country_code = strtoupper('US');
     
-    # Type of the phone number. At the moment we only support Local phone numbers. 
+    # Type of phone number. At the moment we only support Local phone numbers. 
     # Soon we'll support Tollfree numbers as well.
     $phone_number_type = 'Local';
     
-    # Way how you can reach to available phone numbers page limited to 1 records per page.
+    # This is how you can request the available phone numbers page limited to 1 record per page.
     # array( 'available_phone_numbers', $country_code, $phone_number_type ) will create:
     # AvailablePhoneNumbers/US/Local.json for you!
     $available_numbers = $telapi->get(array( 'available_phone_numbers', $country_code, $phone_number_type ), array(
         'PageSize' => 1
     ));
     
-    # This will be or NULL or E.164 based phone number from TelAPI
+    # This will be or NULL (if no numbers were available) or an E.164 based phone number from TelAPI
     $available_phone_number = null;
     
-    # Because we have multiple available phone numbers in list if we choose so
+    # Because we can have multiple available phone numbers in a list if we choose 
     # we cannot access numbers as in instance mode ( $instance -> sid ) and instead
     # we need to loop thru numbers, or in this case, the AvailablePhoneNumber resource,
     # fetch first instance, access phone number value and then break.
@@ -97,7 +96,7 @@ try {
         'PhoneNumber' => $available_phone_number
     ));
 
-    # Iteration over incoming phone numbers
+    # Iterate over incoming phone numbers
     foreach($incoming_numbers->items() as $number) {
         print_r($number);
     }

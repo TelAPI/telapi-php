@@ -28,7 +28,7 @@ require_once 'TelApi/Related.php';
 
 /**
  * 
- * TelAPI singleton instance to the wrapper itself
+ * TelAPI singleton instance to the wrapper
  * 
  * --------------------------------------------------------------------------------
  * 
@@ -48,8 +48,8 @@ final class TelApi extends TelApi_Related
     protected static $_instance = null;
     
     /**
-     * Singleton access method to TelAPI. This is THE ONLY PROPER WAY how to
-     * access TelAPI wrapper itself.
+     * Singleton access method to TelAPI. This is THE ONLY PROPER WAY to
+     * access the TelAPI wrapper!
      * 
      * @return self
      */

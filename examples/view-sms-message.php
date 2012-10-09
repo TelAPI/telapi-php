@@ -27,14 +27,13 @@ $auth_token  = '{AuthToken}';
 # response_to_array to TRUE otherwise, leave it as-is
 $response_to_array = false;
 
-
 # First we must import the actual TelAPI library
 require_once '../library/TelApi.php';
 
-# Now what we need to do is to instanciate library and set required options
+# Now what we need to do is instantiate the library and set the required options defined above
 $telapi = TelApi::getInstance();
 
-# This is a best approach on how to setup multiple options recursively
+# This is the best approach to setting multiple options recursively
 # Take note that you cannot set non-existing options
 $telapi -> setOptions(array( 
     'account_sid'       => $account_sid, 
@@ -42,12 +41,11 @@ $telapi -> setOptions(array(
     'response_to_array' => $response_to_array
 ));
 
-# If an error occurs, TelApi_Exception will be raised. Due to same logic
-# it's best to always do try/catch block while doing any querying against TelAPI
+# If an error occurs, TelApi_Exception will be raised. Due to this,
+# it's a good idea to always do try/catch blocks while querying TelAPI
 try {
     
-    # ARRAY as first argument is here due to mutliple sub-nesting inside of resource uri
-    # when for example, you need to get instance of some resource or in this case, SMS Message.
+    # ARRAY as the first argument is due to mutliple components in the resource uri /sms_messages/{SMSMessageSid}
     $sms_message = $telapi->get(array( 'sms_messages', '{SMSMessageSid}' ));
     
     # If you wish to get back the SMS/Message SID then use:

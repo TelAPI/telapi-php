@@ -16,11 +16,11 @@
 abstract class TelApi_Related
 {
     
-    /** Wrapper return TelAPI response as JSON */
+    /** Wrapper to return TelAPI response as JSON */
     CONST WRAPPER_JSON         = 'json';
     
    
-    /** Wrapper return TelAPI response as XML */
+    /** Wrapper to return TelAPI response as XML */
     CONST WRAPPER_XML          = 'xml';
     
     
@@ -32,7 +32,7 @@ abstract class TelApi_Related
     
     
     /** 
-     * Startup component of the api request url. This will be built into the
+     * Beginning component of the API request url. This will be built into the
      * url, so please avoid changing this if you want the wrapper to work! 
      */
     CONST API_START_COMPONENT  = 'Accounts';
@@ -109,7 +109,7 @@ abstract class TelApi_Related
     
     /**
      * Set a single option for the TelAPI wrapper. If option key doesn't exist it will
-     * throw that key itself is not available and therefore cannot be found.
+     * throw that the key itself is not available and therefore cannot be found.
      * 
      * @param  string $key
      * @param  mixed  $value
@@ -186,7 +186,7 @@ abstract class TelApi_Related
     
     /**
      * DELETING resources such as recordings.
-     * You cannot add query parameters to this resource and same one is very limited (deleting)
+     * You cannot add query parameters to this resource and it is very limited (deleting)
      * so please consult REST documentation on the telapi site.
      * 
      * @param  string|array $component 
@@ -301,7 +301,7 @@ abstract class TelApi_Related
     
     
     /**
-     * Building GET query parameters will return blank if no parameters
+     * Building GET query parameters will return blank if there are no parameters
      * 
      * @param  array  $parameters
      * @return string 
@@ -324,7 +324,7 @@ abstract class TelApi_Related
     
     
     /**
-     * Building GET query parameters will return blank if no parameters
+     * Building GET query parameters will return blank if there are no parameters
      * 
      * @param  array  $parameters
      * @return string 
@@ -345,7 +345,7 @@ abstract class TelApi_Related
 
     
     /**
-     * Doing the actual curl request
+     * Do the actual curl request
      * 
      * @param  string  $url
      * @param  string  $type

@@ -10,7 +10,7 @@ require_once 'Schemas.php';
  * 
  * A TelAPI InboundXML wrapper.
  * 
- * Please consult yourself with online documentation for more details.
+ * Please consult the online documentation for more details.
  * Online documentation can be found at: http://www.telapi.com/docs/api/inboundxml/
  * 
  * --------------------------------------------------------------------------------
@@ -77,7 +77,7 @@ class TelApi_InboundXML
      */
     public function __call($verb, array $args) {
         
-        /** Let's first go check if verb exists **/
+        /** Let's first go check if the verb exists **/
         $this->_validateVerb(ucfirst($verb));
 
         /** Let's go validate nesting **/
@@ -130,7 +130,7 @@ class TelApi_InboundXML
         if(!$schemas->isVerb(ucfirst($verb))) {
             $available_verbs = implode(', ', $schemas->getAvailableVerbs());
             throw new TelApi_Exception(
-                "Verb '{$verb}' is not valid InboundXML verb. Available verbs are: '{$available_verbs}'"
+                "Verb '{$verb}' is not a valid InboundXML verb. Available verbs are: '{$available_verbs}'"
             );
         }
         
@@ -153,7 +153,7 @@ class TelApi_InboundXML
             $current_verb   = ucfirst($this->_currentChild);
             $next_verb      = ucfirst($verb);
             throw new TelApi_Exception(
-                "InboundXML element '{$current_verb}' does not support '{$next_verb}' element. Following elements are supported: '{$nestable_verbs}'."
+                "InboundXML element '{$current_verb}' does not support '{$next_verb}' element. The following elements are supported: '{$nestable_verbs}'."
             );
         }
         

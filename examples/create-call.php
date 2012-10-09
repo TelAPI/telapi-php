@@ -23,17 +23,17 @@ $account_sid = '{AccountSid}';
 $auth_token  = '{AuthToken}';
 
 # If you want the response decoded into an Array instead of an Object, set
-# response_to_array to TRUE otherwise, leave it as-is
+# response_to_array to TRUE, otherwise, leave it as-is
 $response_to_array = false;
 
 
 # First we must import the actual TelAPI library
 require_once '../library/TelApi.php';
 
-# Now what we need to do is to instanciate library and set required options
+# Now what we need to do is instantiate the library and set the required options defined above
 $telapi = TelApi::getInstance();
 
-# This is a best approach on how to setup multiple options recursively
+# This is the best approach to setting multiple options recursively
 # Take note that you cannot set non-existing options
 $telapi -> setOptions(array( 
     'account_sid'       => $account_sid, 
@@ -41,16 +41,14 @@ $telapi -> setOptions(array(
     'response_to_array' => $response_to_array
 ));
 
-# If an error occurs, TelApi_Exception will be raised. Due to same logic
-# it's best to always do try/catch block while doing any querying against TelAPI
+# If an error occurs, TelApi_Exception will be raised. Due to this,
+# it's a good idea to always do try/catch blocks while querying TelAPI
 try {
     
-    # Code bellow will make a new call message.
-    
-    # NOTICE
+    # NOTICE: The code bellow will initiate a new call message.
     
     # TelApi_Helpers::filter_e164 is a internal, wrapper helper to help you work with phone numbers and their formatting
-    # For more information about what E.164 actually is, please visit: http://en.wikipedia.org/wiki/E.164
+    # For more information about E.164, please visit: http://en.wikipedia.org/wiki/E.164
     
     $call = $telapi->create('calls', array(
         'From' => '(XXX) XXX-XXXX',
@@ -58,7 +56,7 @@ try {
         'Url'  => "http://www.telapi.com/ivr/welcome/call"
     ));
     
-    # If you wish to get back the call SID then use:
+    # If you wish to get the Call SID just created then use:
     print_r($call->sid);
     
     # If you wish to get back the full response object/array then use:

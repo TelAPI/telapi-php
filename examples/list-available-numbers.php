@@ -30,10 +30,10 @@ $response_to_array = false;
 # First we must import the actual TelAPI library
 require_once '../library/TelApi.php';
 
-# Now what we need to do is to instanciate library and set required options
+# Now what we need to do is instantiate the library and set the required options defined above
 $telapi = TelApi::getInstance();
 
-# This is a best approach on how to setup multiple options recursively
+# This is the best approach to setting multiple options recursively
 # Take note that you cannot set non-existing options
 $telapi -> setOptions(array( 
     'account_sid'       => $account_sid, 
@@ -41,22 +41,22 @@ $telapi -> setOptions(array(
     'response_to_array' => $response_to_array
 ));
 
-# If an error occurs, TelApi_Exception will be raised. Due to same logic
-# it's best to always do try/catch block while doing any querying against TelAPI
+# If an error occurs, TelApi_Exception will be raised. Due to this,
+# it's a good idea to always do try/catch blocks while querying TelAPI
 try {
     
-    # AvailablePhoneNumbers resource is here to help you with purchase of the phone number.
+    # The AvailablePhoneNumbers resource is used to help with purchasing a phone number.
     # With this resource you can list ALL available phone numbers based on the phone type and the country code
     
     # Country Code of phone number. 2 digit country code required. 
     # Always use uppercase letters such as 'US' instead of 'us'
     $country_code = strtoupper('US');
     
-    # Type of the phone number. At the moment we only support Local phone numbers. 
+    # Type of phone number. At the moment we only support Local phone numbers. 
     # Soon we'll support Tollfree numbers as well.
     $phone_number_type = 'Local';
     
-    # Way how you can reach to available phone numbers page limited to 5 records per page.
+    # This is how you can request the available phone numbers page limited to 5 records per page.
     # array( 'available_phone_numbers', $country_code, $phone_number_type ) will create:
     # AvailablePhoneNumbers/US/Local.json for you!
     $available_numbers = $telapi->get(array( 'available_phone_numbers', $country_code, $phone_number_type ), array(

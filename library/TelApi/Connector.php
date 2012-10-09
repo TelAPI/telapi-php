@@ -6,7 +6,7 @@ require_once 'Exception.php';
 /**
  * 
  * A connector class. Class where TelAPI response is being "organized" for usage.
- * From here you can get records, attributes, request header data.
+ * From here you can get records, attributes, and request header data.
  * 
  * --------------------------------------------------------------------------------
  * 
@@ -44,8 +44,6 @@ class TelApi_Connector
 
     
     /**
-     * http://www.youtube.com/watch?v=oHg5SJYRHA0
-     * 
      * @param string $curl_data
      * @param bool   $response_association
      */
@@ -80,7 +78,7 @@ class TelApi_Connector
 
                 
                 throw new TelApi_Exception(
-                    "Error occured while querying TelAPI with message '{$error_message}' and error code '{$error_code}'"
+                    "An error occured while querying TelAPI with the message '{$error_message}' and the error code '{$error_code}'"
                 );
             }
         }
@@ -150,7 +148,7 @@ class TelApi_Connector
     
     /**
      * Return all the items of current TelAPI request. Actual response will be
-     * auto fetch based on requested component key
+     * auto fetched based on requested component key
      * 
      * @return object|array
      */
@@ -164,7 +162,7 @@ class TelApi_Connector
     
     
     /**
-     * Decode responded JSON object and throw error in case of a decoding failure.
+     * Decode returned JSON object and throw error in case of a decoding failure.
      * 
      * @throws TelApi_Exception 
      * @return Void

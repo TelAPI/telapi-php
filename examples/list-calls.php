@@ -31,10 +31,10 @@ $response_to_array = false;
 # First we must import the actual TelAPI library
 require_once '../library/TelApi.php';
 
-# Now what we need to do is to instanciate library and set required options
+# Now what we need to do is instantiate the library and set the required options defined above
 $telapi = TelApi::getInstance();
 
-# This is a best approach on how to setup multiple options recursively
+# This is the best approach to setting multiple options recursively
 # Take note that you cannot set non-existing options
 $telapi -> setOptions(array( 
     'account_sid'       => $account_sid, 
@@ -42,8 +42,8 @@ $telapi -> setOptions(array(
     'response_to_array' => $response_to_array
 ));
 
-# If an error occurs, TelApi_Exception will be raised. Due to same logic
-# it's best to always do try/catch block while doing any querying against TelAPI
+# If an error occurs, TelApi_Exception will be raised. Due to this,
+# it's a good idea to always do try/catch blocks while querying TelAPI
 try {
     
     # The code bellow will fetch the call details with 10 records per page (PageSize).

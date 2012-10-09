@@ -1,9 +1,8 @@
 ## Run Instructions
 
-In order to run files located under this path you will need to follow a few easy steps. Runing them is very easy :) 
+In order to run files located under this path you will need to follow a few short steps. Runing them is very easy :) 
 
 Once you choose the desired example you will need to:
-
 
 #### Step 1 - Change credentials
 
@@ -19,7 +18,7 @@ $account_sid = '{AccountSid}';
 $auth_token  = '{AuthToken}';
 ```
 
-`{AccountSid}` and `{AuthToken}` must be changed with real credentials which you can find at [TelAPI dashboard](https://www.telapi.com/dashboard)
+`{AccountSid}` and `{AuthToken}` must be replaced with real credentials which you can find at [TelAPI dashboard](https://www.telapi.com/dashboard)
 
 
 #### Step 2 - Change parameters ( if needed )
