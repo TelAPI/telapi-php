@@ -46,7 +46,7 @@ Usage
 
 ### REST
 
-[TelAPI REST API documenatation](http://www.telapi.com/docs/api/rest/) 
+[TelAPI REST API documentation](http://www.telapi.com/docs/api/rest/) 
 
 ##### Send SMS Example
 
@@ -73,7 +73,7 @@ print_r($sms_message);
 
 ### InboundXML
 
-InboundXML is an XML dialect which enables you to control phone call flow. For more information please visit the [TelAPI InboundXML documenatation](http://www.telapi.com/docs/api/inboundxml/)
+InboundXML is an XML dialect which enables you to control phone call flow. For more information please visit the [TelAPI InboundXML documentation](http://www.telapi.com/docs/api/inboundxml/)
 
 ##### <Say> Example
 
