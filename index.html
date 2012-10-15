@@ -1,66 +1,2103 @@
 <!doctype html>
 <html>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Telapi-php by TelAPI</title>
+    <title>TelAPI-PHP Reference</title>
 
     <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
+    <link href="stylesheets/prettify.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="javascripts/prettify.js"></script>
+
   </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>Telapi-php</h1>
-        <p></p>
+  <body onload="prettyPrint()">
 
-        <p class="view"><a href="https://github.com/TelAPI/telapi-php">View the Project on GitHub <small>TelAPI/telapi-php</small></a></p>
+<div class="topbar">
+<div class="container">
+<a href="http://www.telapi.com" class="brand">TelAPI</a>
+</div>
+</div>
+
+<div class="container">
+<div class="hero-unit">
+<h1>TelAPI-PHP Reference</h1>
+</div>
+</div>
+
+    <div class="container">
+        <div class="row">
+        <div class="span-two-thirds">
+
+        <h1 id="inboundxml">InboundXML</h1>
+
+        <p>We've made generating InboundXML with this library as intuitive as possible by defining a simple code design pattern which corresponds to the structure of the XML. The best way to understand this pattern is to take a look at an example:</p>
+
+<pre class="prettyprint lang-php">
+$inbound_xml = new TelApi_InboundXML();
+
+echo $inbound_xml;
+
+/*
+&lt;?xml version="1.0"?&gt;
+&lt;/Response&gt;
+*/
+</pre>
+
+<p>First and foremost, you need to instantiate a new InboundXML object. This assignment alone begins the process of generating the xml. As shown above, if we echo $inbound_xml, the start of the base elements required for an InboundXML document are output.</p>
+
+<pre class="prettyprint lang-php">
+$inbound_xml = new TelApi_InboundXML();
+
+$inbound_xml->record();
+
+echo $inbound_xml;
+
+/*
+&lt;?xml version="1.0"?&gt;
+&lt;Response&gt;&lt;Record/&gt;&lt;/Response&gt;
+*/
+</pre>
+
+<p>Creating elements is super easy. Simply reference the element you would like to add to the XML document with pointer notation as shown above.</p>
+
+<pre class="prettyprint lang-php">
+$inbound_xml = new TelApi_InboundXML();
+
+$inbound_xml->record(array('action'=>'http://foo-url.com/'));
+
+$inbound_xml->say('hello!', array('voice'=>'man'));
+
+echo $inbound_xml;
+
+/*
+&lt;?xml version="1.0"?&gt;
+&lt;Response&gt;
+&lt;Record action="http://foo-url.com/"/&gt;
+&lt;Say voice="man"&gt;hello!&lt;/Say&gt;
+&lt;/Response&gt;
+*/
+</pre>
+
+<p>The elements can take two parameters: the first (or only) may be a string of text. If no string parameter is provided, the element will be output an empty-element tag, which is what is desired in the case of record. The second parameter (or only) parameter may be an array containing key value pairs to be used as element attributes. The example above demonstrates both these patterns.</p>
+
+<pre class="prettyprint lang-php">
+$inbound_xml = new TelApi_InboundXML();
+
+$inbound_xml->record(array('action'=>'http://foo-url.com/'));
+
+$inbound_xml->say('hello!', array('voice'=>'man'));
+
+$inbound_xml->dial()->conference('ConfRoom');
+
+echo $inbound_xml;
+
+/*
+&lt;?xml version="1.0"?&gt;
+&lt;Response&gt;
+&lt;Record action="http://foo-url.com/"/&gt;
+&lt;Say voice="man"&gt;hello!&lt;/Say&gt;
+&lt;Dial&gt;&lt;Conference&gt;ConfRoom&lt;/Conference>&lt;/Dial&gt;
+&lt;/Response&gt;
+*/
+</pre>
+
+<p>The last design pattern to be aware of is used for nesting elements. To nest an element within another, just use pointer notation from the parent element to the nested element. This is demonstrated above by the code which outputs a conference element nested within a dial.</p>
+
+        
+        <hr><h1 id="rest-api">REST API</h1>
+
+        <P>Before using any of the TelAPI REST methods available, you must authenticate your account. Do so by including your REST API credentials in the following way:</p>
+
+<pre class="prettyprint lang-php">
+$telapi = TelApi::getInstance();
+$telapi -> setOptions(array(
+    'account_sid'       => '{AccountSid}',
+    'auth_token'        => '{AuthToken}',
+));
+</pre> 
+
+      <p>By default, the responses and resources returned by TelAPI are stored as objects. To store responses as arrays instead, simply include 'response_to_array' => true in the setOptions array when authenticating.</p>
+
+      <h4>Query Methods</h4>
+
+      <p>In addition to setOptions, there are only four other <a href="https://github.com/TelAPI/telapi-php/blob/master/library/TelApi/Related.php#L139">methods</a> you might use to interact with TelAPI:</p>
+
+<pre>
+$telapi->get()          // used to view or list resources
+
+$telapi->create()     // used to create resources (make call, send sms, etc.)
+
+$telapi->update()   // used to update resources
+
+$telapi->delete() // used to delete resources
+</pre>
+
+<h4>Query Method Request Format</h4>
+<p>The above query methods will take at least one parameter and at most two (delete will only take one). The first (or only) parameter may be either a string or an array and defines the URL path components to use with the API request. An array is used for the first parameter when multiple URL components are required. The second parameter that may be passed will always be an array containing key value pairs defining the API request parameters. See below for query method usage examples.</p> 
+
+<h4>Parameter Format</h4>
+<p>All keys passed to the second query method array parameter defining the REST API options and behavior must be <a href="http://c2.com/cgi/wiki?PascalCase">PascalCased</a>.</p>
+
+        <hr><h2 id="accounts">Accounts</h2>
+
+        <h4 style="display:inline;">View Account</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/accounts/view/">Documentation</a><br>
+
+        <p>Request and print an account resource:</p>
+
+<pre class="prettyprint lang-php">
+$account = $telapi->get('accounts');
+
+print_r($account->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {AccountSid}
+    [friendly_name] => foo@email.com
+    [status] => active
+    [account_balance] => 38.193200
+    [date_created] => Wed, 14 Mar 2012 16:47:29 +0000
+    [date_updated] => Thu, 4 Oct 2012 13:58:47 +0000
+    [uri] => /v1/Accounts/{AccountSid}.json
+    [type] => Full
+    [timezone] => EST
+    [subresource_uris] => stdClass Object
+        (
+            [available_phone_numbers] => /v1/Accounts/{AccountSid}/AvailablePhoneNumbers.json
+            [calls] => /v1/Accounts/{AccountSid}/Calls.json
+            [conferencess] => /v1/Accounts/{AccountSid}/Conferencess.json
+            [incoming_phone_numbers] => /v1/Accounts/{AccountSid}/IncomingPhoneNumbers.json
+            [notifications] => /v1/Accounts/{AccountSid}/Notifications.json
+            [recordings] => /v1/Accounts/{AccountSid}/Recordings.json
+            [sms_messages] => /v1/Accounts/{AccountSid}/SMS/Messages.json
+            [transcriptions] => /v1/Accounts/{AccountSid}/Transcriptions.json
+            [transactions] => /v1/Accounts/{AccountSid}/Transactions.json
+            [applications] => /v1/Accounts/{AccountSid}/Applications.json
+            [fraud] => /v1/Accounts/{AccountSid}/Fraud.json
+            [cnam] => /v1/Accounts/{AccountSid}/CNAM.json
+            [carrier] => /v1/Accounts/{AccountSid}/Carrier.json
+            [usages] => /v1/Accounts/{AccountSid}/Usages.json
+        )
+
+)
+</pre>
 
 
-        <ul>
-          <li><a href="https://github.com/TelAPI/telapi-php/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/TelAPI/telapi-php/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="https://github.com/TelAPI/telapi-php">View On <strong>GitHub</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h3>Welcome to GitHub Pages.</h3>
+        <h4 style="display:inline;">View Usage</h4>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here using GitHub Flavored Markdown, select a template crafted by a designer, and publish. After your page is generated, you can check out the new branch:</p>
+        <a href="http://www.telapi.com/docs/api/rest/accounts/view-usage/">Documentation</a><br>
 
-<pre><code>$ cd your_repo_root/repo_name
-$ git fetch origin
-$ git checkout gh-pages
-</code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+        <p>Request and print a usage resource:</p>
 
-<h3>Designer Templates</h3>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<pre class="prettyprint lang-php">
+$usage = $telapi->get(array(
+        'usages',
+        '{usageSid}'
+));
 
-<h3>Rather Drive Stick?</h3>
+print_r($usage->getResponse());                     
+</pre>
 
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
+      <p>print_r example output:</p>
 
-<h3>Authors and Contributors</h3>
+<pre>
+stdClass Object
+(
+    [sid] => {UsageSid}
+    [product] => Inbound Call
+    [day] => 5
+    [month] => 10
+    [year] => 2012
+    [quantity] => 2
+    [average_cost] => 0.010000
+    [total_cost] => 0.020000
+    [uri] => /v1/Accounts/{AccountSid}/Usages/{UsageSid}.json
+)
+</pre>
 
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+        <h4 style="display:inline;">List Usages</h4>
 
-<h3>Support or Contact</h3>
+        <a href="http://www.telapi.com/docs/api/rest/accounts/list-usages/">Documentation</a><br>
 
-<p>Having trouble with Pages? Check out the documentation at <a href="http://help.github.com/pages">http://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="https://github.com/TelAPI">TelAPI</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
+
+        <p>Request and print a usage list resource with an optional pagesize parameter:</p>
+
+
+<pre class="prettyprint lang-php">
+$usages = $telapi->get('usages',array(
+    'PageSize' => '5'
+));
+ 
+# Print content of the usages object
+print_r($usages->getResponse());                   
+</pre>
+
+      <p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 1
+    [page_size] => 5
+    [total] => 8
+    [start] => 0
+    [end] => 4
+    [uri] => /v1/Accounts/{AccountSid}/Usages.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Usages.json?Page=0&amp;PageSize=5
+    [previous_page_uri] => 
+    [next_page_uri] => 
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Usages.json?Page=0&amp;PageSize=5
+    [usages] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [sid] => {UsageSid}
+                    [product] => Inbound Call
+                    [day] => 27
+                    [month] => 9
+                    [year] => 2012
+                    [quantity] => 2
+                    [average_cost] => 0.010000
+                    [total_cost] => 0.020000
+                    [uri] => /v1/Accounts/{AccountSid}/Usages/{UsageSid}.json
+                )
+
+            [1] => stdClass Object
+                (
+                    [sid] => {UsageSid}
+                    [product] => Recurring Inbound Channel
+                    [day] => 1
+                    [month] => 10
+                    [year] => 2012
+                    [quantity] => 1
+                    [average_cost] => 27.000000
+                    [total_cost] => 27.000000
+                    [uri] => /v1/Accounts/{AccountSid}/Usages/{UsageSid}.json
+                )
+
+            [2] => stdClass Object
+                (
+                    [sid] => {UsageSid}
+                    [product] => Outbound Call (Spoofed)
+                    [day] => 1
+                    [month] => 10
+                    [year] => 2012
+                    [quantity] => 1
+                    [average_cost] => 0.058400
+                    [total_cost] => 0.058400
+                    [uri] => /v1/Accounts/{AccountSid}/Usages/{UsageSid}.json
+                )
+
+
+        )
+
+)
+</pre>
+
+            <hr><h2 id="sms">SMS</h2>
+
+        <h4 style="display:inline;">View SMS Message</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/sms/view/">Documentation</a><br>
+
+        <p>Request and print an SMS resource:</p>
+
+<pre class="prettyprint lang-php">
+$sms_message = $telapi->get(array(
+    'sms_messages',
+    '{SmsMessageSid}'
+));
+ 
+print_r($sms_message->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [api_version] => v1
+    [sid] => {SmsMessageSid}
+    [account_sid] => {AccountSid}
+    [date_created] => Thu, 13 Sep 2012 14:26:23 +0000
+    [date_updated] => Thu, 13 Sep 2012 14:26:25 +0000
+    [date_sent] => Thu, 13 Sep 2012 14:26:25 +0000
+    [to] => +17325551234
+    [from] => +15558675309
+    [body] => Hey! Whats for dinner?
+    [status] => sent
+    [direction] => outbound-reply
+    [price] => 0.010000
+    [uri] => /v1/Accounts/{AccountSid}/SMS/Messages/{SmsMessageSid}.json
+)
+</pre>
+
+<h4 style="display:inline;">List SMS Messages</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/sms/list/">Documentation</a><br>
+
+        <p>Request and print an SMS list resource with an optional pagesize parameter:</p>
+
+<pre class="prettyprint lang-php">
+$sms_messages = $telapi->get('sms_messages', array(
+    'PageSize' => '5'
+));
+
+print_r($sms_messages->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [api_version] => v1
+    [sid] => {SmsMessageSid}
+    [account_sid] => {AccountSid}
+    [date_created] => Thu, 13 Sep 2012 14:26:23 +0000
+    [date_updated] => Thu, 13 Sep 2012 14:26:25 +0000
+    [date_sent] => Thu, 13 Sep 2012 14:26:25 +0000
+    [to] => +17325551234
+    [from] => +15558675309
+    [body] => Hey! Whats for dinner?
+    [status] => sent
+    [direction] => outbound-reply
+    [price] => 0.010000
+    [uri] => /v1/Accounts/{AccountSid}/SMS/Messages/{SmsMessageSid}.json
+)
+stdClass Object
+(
+    [api_version] => v1
+    [sid] => {SmsMessageSid}
+    [account_sid] => {AccountSid}
+    [date_created] => Thu, 13 Sep 2012 15:26:23 +0000
+    [date_updated] => Thu, 13 Sep 2012 15:26:25 +0000
+    [date_sent] => Thu, 13 Sep 2012 15:26:25 +0000
+    [to] => +15558675309
+    [from] => +17325551234
+    [body] => Cake.
+    [status] => sent
+    [direction] => outbound-reply
+    [price] => 0.010000
+    [uri] => /v1/Accounts/{AccountSid}/SMS/Messages/{SmsMessageSid}.json
+)
+</pre>
+
+<h4 style="display:inline;">Send SMS Message</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/sms/send/">Documentation</a><br>
+
+        <p>Use the create method along with an array of parameters to send an SMS message:</p>
+
+<pre class="prettyprint lang-php">
+$sms_message = $telapi->create('sms_messages', array(
+    'From' => '{SMS_Enabled_TelAPI_Number}',
+    'To' => '{SMS_Enabled_Receiving_Number}',
+    'Body' => 'This is an SMS message!'
+));
+ 
+# Print content of the sms message object
+print_r($sms_message->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [api_version] => v1
+    [sid] => {SmsMessageSid}
+    [account_sid] => {AccountSid}
+    [date_created] => Fri, 5 Oct 2012 19:51:00 +0000
+    [date_updated] => Fri, 5 Oct 2012 19:51:00 +0000
+    [date_sent] => 
+    [to] => {SMS_Enabled_TelAPI_Number}
+    [from] => {SMS_Enabled_Receiving_Number}
+    [body] => This is an SMS Message!
+    [status] => sent
+    [direction] => outbound-api
+    [price] => 0.0200000
+    [uri] => /v1/Accounts/{AccountSid}/SMS/Messages/{SmsMessageSid}.json
+)
+</pre>
+
+<hr><h2 id="calls">Calls</h2>
+
+        <h4 style="display:inline;">View Call</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/calls/view/">Documentation</a><br>
+
+        <p>Request and print a call resource:</p>
+
+<pre class="prettyprint lang-php">
+$call = $telapi->get(array(
+    'calls',
+    '{CallSid}'
+));
+ 
+print_r($call->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {CallSid}
+    [date_created] => Tue, 18 Sep 2012 17:06:57 +0000
+    [date_updated] => Tue, 18 Sep 2012 17:07:56 +0000
+    [parent_call_sid] => 
+    [account_sid] => {AccountSid}
+    [to] => +17325551234
+    [from] => +6091235555
+    [phone_number_sid] => {PhoneNumberSid}
+    [status] => completed
+    [start_time] => Tue, 18 Sep 2012 17:06:57 +0000
+    [end_time] => Tue, 18 Sep 2012 17:07:56 +0000
+    [duration] => 59
+    [price] => 0.010000
+    [direction] => inbound
+    [answered_by] => None
+    [api_version] => v1
+    [forwarded_from] => 
+    [sip_privacy] => 
+    [privacy_hide_number] => False
+    [uri] => /v1/Accounts/{AccountSid}/Calls/{CallSid}.json
+    [subresource_uris] => stdClass Object
+        (
+            [notifications] => /v1/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json
+            [recordings] => /v1/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json
+        )
+
+)
+</pre>
+
+
+        <h4 style="display:inline;">List Calls</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/calls/list/">Documentation</a><br>
+
+        <p>Request and print a call list resource with an optional pagesize parameter:</p>
+
+<pre class="prettyprint lang-php">
+$calls = $telapi->get( 'calls', array(
+    'PageSize' => '5'
+));
+
+print_r($calls->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 1
+    [page_size] => 5
+    [total] => 3
+    [start] => 0
+    [end] => 0
+    [uri] => /v1/Accounts/{AccountSid}/Calls.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Calls.json?Page=0&amp;PageSize=5
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/Calls.json?Page=1&amp;PageSize=5
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Calls.json?Page=383&amp;PageSize=5
+    [calls] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [sid] => {CallSid}
+                    [date_created] => Fri, 5 Oct 2012 20:39:46 +0000
+                    [date_updated] => Fri, 5 Oct 2012 20:39:53 +0000
+                    [parent_call_sid] => 
+                    [account_sid] => {AccountSid}
+                    [to] => +17321235555
+                    [from] => +17325551234
+                    [phone_number_sid] => 
+                    [status] => canceled
+                    [start_time] => Fri, 5 Oct 2012 20:39:46 +0000
+                    [end_time] => Fri, 5 Oct 2012 20:39:53 +0000
+                    [duration] => 0
+                    [price] => 0.000000
+                    [direction] => outbound-api
+                    [answered_by] => None
+                    [api_version] => v1
+                    [forwarded_from] => 
+                    [sip_privacy] => None
+                    [privacy_hide_number] => False
+                    [uri] => /v1/Accounts/{AccountSid}/Calls/{CallSid}.json
+                    [subresource_uris] => stdClass Object
+                        (
+                            [notifications] => /v1/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json
+                            [recordings] => /v1/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json
+                        )
+
+                )
+
+            [1] => stdClass Object
+                (
+                    [sid] => {CallSid}
+                    [date_created] => Fri, 5 Oct 2012 13:55:05 +0000
+                    [date_updated] => Fri, 5 Oct 2012 13:55:12 +0000
+                    [parent_call_sid] => 
+                    [account_sid] => {AccountSid}
+                    [to] => +7325551234
+                    [from] => +1235551234
+                    [phone_number_sid] => {PhoneNumebrSid}
+                    [status] => completed
+                    [start_time] => Fri, 5 Oct 2012 13:55:05 +0000
+                    [end_time] => Fri, 5 Oct 2012 13:55:12 +0000
+                    [duration] => 7
+                    [price] => 0.010000
+                    [direction] => inbound
+                    [answered_by] => None
+                    [api_version] => v1
+                    [forwarded_from] => 
+                    [sip_privacy] => 
+                    [privacy_hide_number] => False
+                    [uri] => /v1/Accounts/{AccountSid}/Calls/{CallSid}.json
+                    [subresource_uris] => stdClass Object
+                        (
+                            [notifications] => /v1/Accounts/{AccountSid}/Calls/{CallSid}/Notifications.json
+                            [recordings] => /v1/Accounts/{AccountSid}/Calls/{CallSid}/Recordings.json
+                        )
+
+                )
+
+        )
+
+)
+</pre>
+
+<h4 style="display:inline;">Make Call</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/calls/make/">Documentation</a><br>
+
+        <p>Use the create method along with an array of parameters to make a call:</p>
+
+<pre class="prettyprint lang-php">
+$call = $telapi->create( 'calls', array(
+    'To' => '5558675309',
+    'From' => '7325551234',
+    'Url' => 'http://www.foo.com'
+));
+
+print_r($call->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {CallSid}
+    [date_created] => Fri, 05 oct 2012 20:39:46 0
+    [date_updated>] => Fri, 05 oct 2012 20:39:46 0
+    [parent_call_sid] => 
+    [account_sid] => {AccoutSid}
+    [to] => +17312355555
+    [from] => +17325551234
+    [phone_number_sid] => 
+    [status] => in-progress
+    [start_time] => 
+    [end_time] => 
+    [duration] => 
+    [price] => 
+    [direction] => outbound-api
+    [answered_by] => 
+    [api_version>] => v1
+    [forwarded_from] => 
+    [caller_name] => 
+    [uri] => /v1/Accounts/{AccoutSid}/Calls/{CallSid}.json
+    [subresource_uris] => stdClass Object
+        (
+            [notifications] => /v1/Accounts/{AccoutSid}/Calls/{CallSid}/Notifications.json
+            [recordings] => /v1/Accounts/{AccoutSid}/Calls/{CallSid}/Recordings.json
+        )
+
+)
+</pre>
+
+<h4 style="display:inline;">Hangup Call</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/calls/hangup/">Documentation</a><br>
+
+        <p>Use the update method along with a status parameter set to completed to hangup a call:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->update(
+    array( 'calls', '{InprogressCallSid}' ),
+    array( 'Status' => 'completed' )
+);
+</pre>
+
+<h4 style="display:inline;">Send Digits to Call</h4>
+ <a href="http://www.telapi.com/docs/api/rest/calls/send-digits/">Documentation</a><br>
+
+         <p>Use the update method along with an array of parameters to play audio to a call:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->update(
+    array( 'calls', '{InprogessCallSid}' ), 
+    array( 'PlayDtmf' => '123' )
+);
+</pre>
+
+<h4 style="display:inline;">Play Audio to Call</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/calls/play-audio/">Documentation</a><br>
+
+        <p>Use the update method along with an array of parameters to play audio to a call:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->update(
+    array( 'calls', '{InprogressCallSid}', 'Play' ),
+    array(
+    'AudioUrl' => 'http://www.example.com/file.mp3'
+));
+</pre>
+
+<h4 style="display:inline;">Voice Effects</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/calls/voice-effects/">Documentation</a><br>
+
+        <p>Use the update method along with an array of parameters to adjust voice effects during a call:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->update( array( 'calls', '{InprogressCallSid}', 'Effect' ),
+    array(
+    'Pitch' => '5'
+));
+</pre>
+
+<h4 style="display:inline;">Call Recording</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/calls/record/">Documentation</a><br>
+
+        <p>Use the update method along with an array of parameters to start or stop recording. Whether the rest call will begin or end a recording depend on the value of the Record parameter:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->update(
+    array( 'calls', '{InprogressCallSid}', 'Recordings' ),
+    array( 'Record' => 'true' )
+);
+</pre>
+
+<hr><h2 id="conferences">Conferences</h2>
+
+<h4 style="display:inline;">View Conference</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/conferences/view/">Documentation</a><br>
+
+        <p>Request and print a conference resource:</p>
+
+<pre class="prettyprint lang-php">
+$conference = $telapi->get(
+    array( 'conferences', '{ConferenceSid}' )
+);
+ 
+print_r($conference->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {ConferenceSid}
+    [friendly_name] => ExampleConference
+    [account_sid] => {AccountSid}
+    [participant_count] => 2
+    [run_time] => 30
+    [status] => completed
+    [uri] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}.json
+    [date_created] => Mon, 8 Oct 2012 15:51:30 +0000
+    [date_updated] => Mon, 8 Oct 2012 15:53:03 +0000
+    [subresource_uris] => stdClass Object
+        (
+            [participants] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json
+        )
+
+)
+</pre>
+
+<h4 style="display:inline;">List Conferences</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/conferences/list/">Documentation</a><br>
+
+        <p>Request and print a conferences list resource with an optional pagesize parameter:</p>
+
+<pre class="prettyprint lang-php">
+$conferences = $telapi->get( 'conferences', array(
+    'PageSize' => '5'
+));
+
+print_r($conferences->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 2
+    [page_size] => 5
+    [total] => 14
+    [start] => 0
+    [end] => 4
+    [uri] => /v1/Accounts/{AccountSid}/Conferences.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Conferences.json?Page=0&amp;PageSize=5
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/Conferences.json?Page=1&amp;PageSize=5
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Conferences.json?Page=1&amp;PageSize=5
+    [conferences] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [sid] => {ConferenceSid}
+                    [friendly_name] => someconference
+                    [account_sid] => {AccountSid}
+                    [participant_count] => 0
+                    [run_time] => 0
+                    [status] => completed
+                    [uri] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}.json
+                    [date_created] => Mon, 8 Oct 2012 15:51:30 +0000
+                    [date_updated] => Mon, 8 Oct 2012 15:53:03 +0000
+                    [subresource_uris] => stdClass Object
+                        (
+                            [participants] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json
+                        )
+
+                )
+
+            [1] => stdClass Object
+                (
+                    [sid] => {ConferenceSid}
+                    [friendly_name] => testconference
+                    [account_sid] => {AccountSid}
+                    [participant_count] => 0
+                    [run_time] => 0
+                    [status] => completed
+                    [uri] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}.json
+                    [date_created] => Mon, 8 Oct 2012 15:39:15 +0000
+                    [date_updated] => Mon, 8 Oct 2012 15:45:14 +0000
+                    [subresource_uris] => stdClass Object
+                        (
+                            [participants] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json
+                        )
+
+                )
+
+            [2] => stdClass Object
+                (
+                    [sid] => {ConferenceSid}
+                    [friendly_name] => conferenconame
+                    [account_sid] => {AccountSid}
+                    [participant_count] => 0
+                    [run_time] => 0
+                    [status] => completed
+                    [uri] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}.json
+                    [date_created] => Mon, 17 Sep 2012 17:28:01 +0000
+                    [date_updated] => Mon, 17 Sep 2012 17:32:24 +0000
+                    [subresource_uris] => stdClass Object
+                        (
+                            [participants] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants.json
+                        )
+
+                )
+
+        )
+
+)
+</pre>
+
+<h4 style="display:inline;">View Participant</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/conferences/view-participant/">Documentation</a><br>
+
+        <p>Request and print a conference participant resource:</p>
+
+<pre class="prettyprint lang-php">
+$participant = $telapi->get(array( 
+'conferences', '{ConferenceSid}', 'Participants', '{CallSid}' 
+));
+ 
+print_r($participant->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [call_sid] => {Callsid}
+    [conference_sid] => {ConferenceSid}
+    [account_sid] => {AccountSid}
+    [muted] => false
+    [deaf] => false
+    [caller_name] => LAKEWOOD, NJ
+    [caller_number] => 7325551234
+    [duration] => 41
+    [uri] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{Callsid}
+    [date_created] => Mon, 8 Oct 2012 17:44:12 +0000
+    [date_updated] => Mon, 8 Oct 2012 17:44:12 +0000
+)
+</pre>
+
+<h4 style="display:inline;">List Participants</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/conferences/list-participants/">Documentation</a><br>
+
+        <p>Request and print a conference participant list resource with an optional pagesize parameter:</p>
+
+<pre class="prettyprint lang-php">
+$participant = $telapi->get(array(
+'conferences', '{ConferenceSid}', 'Participants'
+),
+array(PageSize => '5'));
+
+print_r($participant);
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+Array
+(
+    [0] => stdClass Object
+        (
+            [call_sid] => {CallSid}
+            [conference_sid] => {ConferenceSid}
+            [account_sid] => {AccountSid}
+            [muted] => false
+            [deaf] => false
+            [caller_name] => LAKEWOOD, NJ
+            [caller_number] => 7325551234
+            [duration] => 100
+            [uri] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}
+            [date_created] => Mon, 8 Oct 2012 17:47:19 +0000
+            [date_updated] => Mon, 8 Oct 2012 17:47:19 +0000
+        )
+
+    [1] => stdClass Object
+        (
+            [call_sid] => {CallSid}
+            [conference_sid] => {ConferenceSid}
+            [account_sid] => {AccountSid}
+            [muted] => false
+            [deaf] => false
+            [caller_name] => JOHN SMITH    
+            [caller_number] => 12165551342
+            [duration] => 7
+            [uri] => /v1/Accounts/{AccountSid}/Conferences/{ConferenceSid}/Participants/{CallSid}
+            [date_created] => Mon, 8 Oct 2012 17:48:52 +0000
+            [date_updated] => Mon, 8 Oct 2012 17:48:52 +0000
+        )
+
+)
+</pre>
+
+<h4 style="display:inline;">Deaf or Mute Participant</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/conferences/deaf-or-mute/">Documentation</a><br>
+
+        <p>Use the update method to deaf or mute a conference participant:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->update(
+    array( 'conferences', '{ConferenceSid}', 'Participants', '{CallSid}' ),
+    array( 
+    'Muted' => 'true',
+    'Deaf' => 'false'
+    )
+);
+</pre>
+
+<h4 style="display:inline;">Hangup Participant</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/conferences/hangup-participant/">Documentation</a><br>
+
+        <p>Use the delete method to deaf or mute a conference participant:</p>
+
+<pre class="prettyprint lang-php">
+$participant = $telapi->delete(
+    array( 'conferences', '{ConferenceSid}', 'Participants', '{CallSid}' )
+);
+</pre>
+
+<h4 style="display:inline;">Play Audio to Participant</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/conferences/play-audio/">Documentation</a><br>
+
+        <p>Use the update method to play audio to a participant:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->update(
+    array( 'conferences', '{ConferenceSid}', 'Participants', '{CallSid}', 'Play' ),
+    array(
+    'AudioUrl' => 'http://foo.com/file.mp3'
+    )
+);
+</pre>
+
+<hr><h2 id="applications">Applications</h2>   
+
+<h4 style="display:inline;">View Application</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/applications/view/">Documentation</a><br>
+
+        <p>Request and print an application resource:</p>
+
+<pre class="prettyprint lang-php">
+$application = $telapi->get(array(
+    'applications',
+    '{ApplicationSid}'
+));
+ 
+print_r($application->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {ApplicationSid}
+    [date_created] => Mon, 30 Jul 2012 16:53:23 +0000
+    [date_updated] => Tue, 31 Jul 2012 13:39:21 +0000
+    [account_sid] => {AccountSid}
+    [friendly_name] => ExampleApplication
+    [api_version] => v1
+    [voice_url] => http://www.test.com
+    [voice_method] => POST
+    [voice_fallback_url] => 
+    [voice_fallback_method] => POST
+    [heartbeat_url] => 
+    [heartbeat_method] => POST
+    [hangup_callback] => 
+    [hangup_callback_method] => POST
+    [voice_caller_id_lookup] => False
+    [sms_url] => 
+    [sms_method] => POST
+    [sms_fallback_url] => 
+    [sms_fallback_method] => POST
+    [sms_status_callback] => 
+    [sms_status_callback_method] => POST
+    [uri] => /v1/Accounts/{AccountSid}/Applications/{ApplicationSid}.json
+)
+</pre>
+
+<h4 style="display:inline;">List Application</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/applications/list/">Documentation</a><br>
+
+        <p>Request and print an application list resource with an optional pagesize parameter:</p>
+
+<pre class="prettyprint lang-php">
+$applications = $telapi->get('applications', array(
+    'PageSize' => '5'
+));
+
+print_r($applications->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 0
+    [page_size] => 5
+    [total] => 3
+    [start] => 0
+    [end] => 3
+    [uri] => /v1/Accounts/{AccountSid}/Applications.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Applications.json?Page=0&amp;PageSize=5
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/Applications.json?Page=-1&amp;PageSize=5
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Applications.json?Page=-1&amp;PageSize=5
+    [applications] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [sid] => {ApplicationSid}
+                    [date_created] => Mon, 30 Jul 2012 16:53:23 +0000
+                    [date_updated] => Tue, 31 Jul 2012 13:39:21 +0000
+                    [account_sid] => {AccountSid}
+                    [friendly_name] => ExampleApplication
+                    [api_version] => v1
+                    [voice_url] => http://www.test.com
+                    [voice_method] => POST
+                    [voice_fallback_url] => 
+                    [voice_fallback_method] => POST
+                    [heartbeat_url] => 
+                    [heartbeat_method] => POST
+                    [hangup_callback] => 
+                    [hangup_callback_method] => POST
+                    [voice_caller_id_lookup] => False
+                    [sms_url] => 
+                    [sms_method] => POST
+                    [sms_fallback_url] => 
+                    [sms_fallback_method] => POST
+                    [sms_status_callback] => 
+                    [sms_status_callback_method] => POST
+                    [uri] => /v1/Accounts/{AccountSid}/Applications/{ApplicationSid}.json
+                )
+
+            [1] => stdClass Object
+                (
+                    [sid] => {ApplicationSid}
+                    [date_created] => Tue, 31 Jul 2012 13:34:16 +0000
+                    [date_updated] => Tue, 31 Jul 2012 13:34:16 +0000
+                    [account_sid] => {AccountSid}
+                    [friendly_name] => asdfasf
+                    [api_version] => v1
+                    [voice_url] => 
+                    [voice_method] => POST
+                    [voice_fallback_url] => 
+                    [voice_fallback_method] => POST
+                    [heartbeat_url] => 
+                    [heartbeat_method] => POST
+                    [hangup_callback] => 
+                    [hangup_callback_method] => POST
+                    [voice_caller_id_lookup] => False
+                    [sms_url] => 
+                    [sms_method] => POST
+                    [sms_fallback_url] => 
+                    [sms_fallback_method] => POST
+                    [sms_status_callback] => 
+                    [sms_status_callback_method] => POST
+                    [uri] => /v1/Accounts/{AccountSid}/Applications/{ApplicationSid}.json
+                )
+        )
+
+)
+</pre>
+
+<h4 style="display:inline;">Create Application</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/applications/create/">Documentation</a><br>
+
+        <p>Use the create method along with an array of parameters to create an application:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->create('applications', array(
+     'FriendlyName' => 'exampleApp'
+));
+</pre> 
+
+<h4 style="display:inline;">Update Application</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/applications/update/">Documentation</a><br>
+
+        <p>Use the update method along with an array of parameters to create an application:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->update(
+    array( 'applications', '{ApplicationSid}'), 
+    array( 'FriendlyName' => 'updatedFriendlyName' )
+);
+</pre>
+
+<h4 style="display:inline;">Delete Application</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/applications/delete/">Documentation</a><br>
+
+        <p>Use the delete method to delete an application:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->delete(array(
+    'applications',
+    '{ApplicationSid}'
+));
+</pre>
+
+<hr><h2 id="ipn">Incoming Phone Numbers</h2>   
+
+<h4 style="display:inline;">View Incoming Phone Number</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/incoming-phone-numbers/view/">Documentation</a><br>
+
+        <p>Request and print an incoming phone number resource:</p>
+
+<pre class="prettyprint lang-php">
+$incoming_number = $telapi->get(array( 
+    'incoming_phone_numbers', '{IncomingPhoneNumberSid}' 
+));
+ 
+print_r($incoming_number->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {IncomingPhoneNumberSid}
+    [account_sid] => {AccountSid}
+    [friendly_name] => exampleName
+    [phone_number] => +11235554567
+    [type] => local
+    [voice_application_sid] => 
+    [voice_url] =>  http://telapi.com/ivr/welcome/voice
+    [voice_method] => POST
+    [voice_fallback_url] => 
+    [voice_fallback_method] => POST
+    [voice_caller_id_lookup] => false
+    [date_created] => Thu, 22 Mar 2012 00:00:00 +0000
+    [date_updated] => Mon, 1 Oct 2012 05:00:03 +0000
+    [sms_application_sid] => 
+    [sms_url] =>  http://telapi.com/ivr/welcome/sms 
+    [sms_method] => POST
+    [sms_fallback_url] => 
+    [sms_fallback_method] => POST
+    [heartbeat_url] => 
+    [heartbeat_method] => POST
+    [capabilities] => stdClass Object
+        (
+            [voice] => True
+            [sms] => True
+        )
+
+    [hangup_callback] => 
+    [hangup_callback_method] => POST
+    [api_version] => v1
+    [uri] => /v1/Accounts/{AccountSid}/IncomingPhoneNumbers/{IncomingPhoneNumberSid}.json
+)
+</pre>
+
+<h4 style="display:inline;">List Incoming Phone Numbers</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/incoming-phone-numbers/list/">Documentation</a><br>
+
+        <p>Request and print an incoming phone number list resource:</p>
+
+<pre class="prettyprint lang-php">
+$incoming_numbers = $telapi->get('incoming_phone_numbers', array(
+     'PageSize' => '5'
+));
+ 
+print_r($incoming_numbers->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 0
+    [page_size] => 5
+    [total] => 2
+    [start] => 0
+    [end] => 2
+    [uri] => /v1/Accounts/{AccountSid}/IncomingPhoneNumbers.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/IncomingPhoneNumbers?Page=0&amp;PageSize=5
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/IncomingPhoneNumbers.json?Page=-1&amp;PageSize=5
+    [last_page_uri] => /v1/Accounts/{AccountSid}/IncomingPhoneNumbers.json?Page=-1&amp;PageSize=5
+    [incoming_phone_numbers] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [sid] => {IncomingPhoneNumberSid}
+                    [account_sid] => {AccountSid}
+                    [friendly_name] => main DID
+                    [phone_number] => +15557771111
+                    [type] => local
+                    [voice_application_sid] => 
+                    [voice_url] =>  https://foo.com/file.xml
+                    [voice_method] => POST
+                    [voice_fallback_url] => 
+                    [voice_fallback_method] => POST
+                    [voice_caller_id_lookup] => false
+                    [date_created] => Thu, 22 Mar 2012 00:00:00 +0000
+                    [date_updated] => Mon, 8 Oct 2012 20:02:27 +0000
+                    [sms_application_sid] => 
+                    [sms_url] => 
+                    [sms_method] => GET
+                    [sms_fallback_url] => 
+                    [sms_fallback_method] => POST
+                    [heartbeat_url] => 
+                    [heartbeat_method] => POST
+                    [capabilities] => stdClass Object
+                        (
+                            [voice] => True
+                            [sms] => True
+                        )
+
+                    [hangup_callback] => 
+                    [hangup_callback_method] => POST
+                    [api_version] => v1
+                    [uri] => /v1/Accounts/{AccountSid}/IncomingPhoneNumbers/{IncomingPhoneNumberSid}.json
+                )
+
+            [1] => stdClass Object
+                (
+                    [sid] => {IncomingPhoneNumberSid}
+                    [account_sid] => {AccountSid}
+                    [friendly_name] => exampleName
+                    [phone_number] => +11235554567
+                    [type] => local
+                    [voice_application_sid] => 
+                    [voice_url] =>  http://telapi.com/ivr/welcome/voice
+                    [voice_method] => POST
+                    [voice_fallback_url] => 
+                    [voice_fallback_method] => POST
+                    [voice_caller_id_lookup] => false
+                    [date_created] => Thu, 22 Mar 2012 00:00:00 +0000
+                    [date_updated] => Mon, 1 Oct 2012 05:00:03 +0000
+                    [sms_application_sid] => 
+                    [sms_url] =>  http://telapi.com/ivr/welcome/sms 
+                    [sms_method] => POST
+                    [sms_fallback_url] => 
+                    [sms_fallback_method] => POST
+                    [heartbeat_url] => 
+                    [heartbeat_method] => POST
+                    [capabilities] => stdClass Object
+                        (
+                            [voice] => True
+                            [sms] => True
+                        )
+
+                    [hangup_callback] => 
+                    [hangup_callback_method] => POST
+                    [api_version] => v1
+                    [uri] => /v1/Accounts/{AccountSid}/IncomingPhoneNumbers/{IncomingPhoneNumberSid}.json
+                )
+        )
+)
+</pre>
+
+<h4 style="display:inline;">Add Incoming Phone Number</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/incoming-phone-numbers/add-or-delete/">Documentation</a><br>
+
+        <p>Use the create method to add incoming phone numbers:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->create( 'incoming_phone_numbers', array( 
+     'PhoneNumber' => '{avialbale_telapi_number}'
+));
+</pre>
+
+<h4 style="display:inline;">Delete Incoming Phone Number</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/incoming-phone-numbers/add-or-delete/">Documentation</a><br>
+
+        <p>Use the delete method to delete incoming phone numbers:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->delete(array( 
+    'incoming_phone_numbers', '{IncomingPhoneNumberSid}' 
+));
+</pre>
+
+<h4 style="display:inline;">Update Incoming Phone Number</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/incoming-phone-numbers/update/">Documentation</a><br>
+
+        <p>Use the update method along with an array of parameters to update incoming phone numbers:</p>
+
+<pre class="prettyprint lang-php">
+$incoming_number = $telapi->update(
+    array( 'incoming_phone_numbers', '{IncomingPhoneNumberSid}' ),
+    array( 'FriendlyName' => 'updatedFriendlyName' )
+);
+</pre>
+
+<hr><h2 id="available">Available Phone Numbers</h2>   
+
+<h4 style="display:inline;">List Available Phone Numbers</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/available-phone-numbers/list/">Documentation</a><br>
+
+        <p>Request and print an available phone number list resource:</p>
+
+<pre class="prettyprint lang-php">
+$available_numbers = $telapi->get(array( 
+    'available_phone_numbers', '{CountryCode}', 'Local'),
+     array( 'PageSize' => '5')
+);
+ 
+print_r($available_numbers->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 18
+    [page_size] => 5
+    [total] => 94
+    [start] => 0
+    [end] => 4
+    [uri] => /v1/Accounts/{AccountSid}/AvailablePhoneNumbers/US/Local.json?PageSize=5
+    [first_page_uri] => /v1/Accounts/{AccountSid}/AvailablePhoneNumbers/US/Local.json?Page=0&amp;PageSize=5
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/AvailablePhoneNumbers/US/Local.json?Page=1&amp;PageSize=5
+    [last_page_uri] => /v1/Accounts/{AccountSid}/AvailablePhoneNumbers/US/Local.json?Page=17&amp;PageSize=5
+    [available_phone_numbers] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [friendly_name] => 
+                    [phone_number] => +17605556502
+                    [lata] => 
+                    [rate_center] => 
+                    [latitude] => None
+                    [longitude] => None
+                    [region] => CA
+                    [postal_code] => 
+                    [iso_country] => US
+                    [country_code] => +1
+                    [npa] => 760
+                    [exchange] => 283
+                    [city] => 
+                    [type] => local
+                    [setup_cost] => 1
+                    [monthly_cost] => 1
+                    [unblock_support] => 
+                    [voice_enabled] => 1
+                    [sms_enabled] => 1
+                    [supports_forwarded_from] => 
+                )
+
+            [1] => stdClass Object
+                (
+                    [friendly_name] => 
+                    [phone_number] => +17605556507
+                    [lata] => 
+                    [rate_center] => 
+                    [latitude] => None
+                    [longitude] => None
+                    [region] => CA
+                    [postal_code] => 
+                    [iso_country] => US
+                    [country_code] => +1
+                    [npa] => 760
+                    [exchange] => 283
+                    [city] => 
+                    [type] => local
+                    [setup_cost] => 1
+                    [monthly_cost] => 1
+                    [unblock_support] => 
+                    [voice_enabled] => 1
+                    [sms_enabled] => 1
+                    [supports_forwarded_from] => 
+                )
+
+        )
+
+)
+</pre>
+
+<hr><h2 id="recordings">Recordings</h2>   
+
+<h4 style="display:inline;">View Recording</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/recordings/view/">Documentation</a><br>
+
+        <p>Request and print a recording resource:</p>
+
+<pre class="prettyprint lang-php">
+$recording = $telapi->get(array(
+    'recordings', '{recordingSid}'
+));
+
+print_r($recording->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {RecordingSid}
+    [account_sid] => {AccountSid}
+    [call_sid] => {CallSid}
+    [duration] => 1
+    [date_created] => Wed, 3 Oct 2012 20:34:37 +0000
+    [api_version] => v1
+    [date_updated] => Wed, 3 Oct 2012 20:34:43 +0000
+    [recording_url] => http://recordings.telapi.com/{RecordingBucket}/{RecordingSid}.mp3
+    [uri] => /v1/Accounts/{AccountSid}/Recordings/{RecordingSid}.json
+)
+</pre>
+
+<h4 style="display:inline;">List Recording</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/recordings/list/">Documentation</a><br>
+
+        <p>Request and print a recording list resource:</p>
+
+<pre class="prettyprint lang-php">
+$recording = $telapi->get(
+    array( 'recordings' ),
+    array('PageSize' => '2')
+);
+
+print_r($recording->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 38
+    [page_size] => 2
+    [total] => 76
+    [start] => 0
+    [end] => 1
+    [uri] => /v1/Accounts/{AccountSid}/Recordings.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Recordings.json?Page=0&amp;PageSize=2
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/Recordings.json?Page=1&amp;PageSize=2
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Recordings.json?Page=37&amp;PageSize=2
+    [recordings] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [sid] => {RecordingSid}
+                    [account_sid] => {AccountSid}
+                    [call_sid] => {CallSid}
+                    [duration] => 7
+                    [date_created] => Mon, 8 Oct 2012 15:52:55 +0000
+                    [api_version] => v1
+                    [date_updated] => Mon, 8 Oct 2012 15:53:03 +0000
+                    [recording_url] => http://recordings.telapi.com/{RecordingBucket}/{RecordingSid}.mp3
+                    [uri] => /v1/Accounts/{AccountSid}/Recordings/{RecordingSid}.json
+                )
+
+            [1] => stdClass Object
+                (
+                    [sid] => {RecordingSid}
+                    [account_sid] => {AccountSid}
+                    [call_sid] => {CallSid}
+                    [duration] => 1
+                    [date_created] => Wed, 3 Oct 2012 20:34:37 +0000
+                    [api_version] => v1
+                    [date_updated] => Wed, 3 Oct 2012 20:34:43 +0000
+                    [recording_url] => http://recordings.telapi.com/{RecordingBucket}/{RecordingSid}.mp3
+                    [uri] => /v1/Accounts/{AccountSid}/Recordings/{RecordingSid}.json
+                )
+
+        )
+
+)
+</pre>
+
+<hr><h2 id="notifications">Notifications</h2>   
+
+<h4 style="display:inline;">View Notification</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/notifications/view/">Documentation</a><br>
+
+        <p>Request and print a notification resource:</p>
+
+<pre class="prettyprint lang-php">
+$notification = $telapi->get(array(
+    'notifications', '{NotificationSid}'
+));
+
+print_r($notification->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {NotificationSid}
+    [account_sid] => {AccountSid}
+    [call_sid] => 
+    [api_version] => v1
+    [date_created] => Tue, 9 Oct 2012 15:03:50 +0000
+    [date_updated] => Tue, 9 Oct 2012 15:03:50 +0000
+    [log] => 0
+    [error_code] => 21227
+    [more_info] => http://telapi.com/docs/api/rest/overview/errors/21227
+    [message_text] => ErrorCode=21227&amp;Msg=SID+Could+not+be+found&amp;LogLevel=%280%2C+%27ERROR%27%29&amp;ObjectType=Recording
+    [message_date] => Tue, 9 Oct 2012 15:03:50 +0000
+    [response_body] => 
+    [request_method] => GET
+    [request_url] => https://api.telapi.com/v1/Accounts/{AccountSid}/Recordings/{RecordingSid}.json
+    [request_variables] => 
+    [response_headers] => 
+    [uri] => /v1/Accounts/{AccountSid}/Notifications/{NotificationSid}.json
+)
+</pre>
+
+<h4 style="display:inline;">List Notifications</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/notifications/list/">Documentation</a><br>
+
+        <p>Request and print a notification list resource with optional parameter specifying a pagesize of 2:</p>
+
+<pre class="prettyprint lang-php">
+$notifications = $telapi->get('notifications', array(
+        'PageSize'=>'2'
+));
+
+print_r($notifications->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 240
+    [page_size] => 2
+    [total] => 480
+    [start] => 0
+    [end] => 1
+    [uri] => /v1/Accounts/{AccountSid}/Notifications.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Notifications.json?Page=0&amp;PageSize=2
+    [previous_page_uri] => null
+    [next_page_uri] => /v1/Accounts/{AccountSid}/Notifications.json?Page=1&amp;PageSize=2
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Notifications.json?Page=239&amp;PageSize=2
+    [notifications] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [sid] => {NotificationSid}
+                    [account_sid] => {AccountSid}
+                    [call_sid] => 
+                    [api_version] => v1
+                    [date_created] => Tue, 9 Oct 2012 15:04:15 +0000
+                    [date_updated] => Tue, 9 Oct 2012 15:04:15 +0000
+                    [log] => 0
+                    [error_code] => 21227
+                    [more_info] => http://telapi.com/docs/api/rest/overview/errors/21227
+                    [message_text] => ErrorCode=21227&amp;Msg=SID+Could+not+be+found&amp;LogLevel=%280%2C+%27ERROR%27%29&amp;ObjectType=Recording
+                    [message_date] => Tue, 9 Oct 2012 15:04:15 +0000
+                    [response_body] => 
+                    [request_method] => GET
+                    [request_url] => https://api.telapi.com/v1/Accounts/{AccountSid}/Recordings/{RecordingSid}.json
+                    [request_variables] => 
+                    [response_headers] => 
+                    [uri] => /v1/Accounts/{AccountSid}/Notifications/{NotificationSid}.json
+                )
+
+            [1] => stdClass Object
+                (
+                    [sid] => {NotificationSid}
+                    [account_sid] => {AccountSid}
+                    [call_sid] => 
+                    [api_version] => v1
+                    [date_created] => Tue, 9 Oct 2012 15:03:50 +0000
+                    [date_updated] => Tue, 9 Oct 2012 15:03:50 +0000
+                    [log] => 0
+                    [error_code] => 21227
+                    [more_info] => http://telapi.com/docs/api/rest/overview/errors/21227
+                    [message_text] => ErrorCode=21227&amp;Msg=SID+Could+not+be+found&amp;LogLevel=%280%2C+%27ERROR%27%29&amp;ObjectType=Recording
+                    [message_date] => Tue, 9 Oct 2012 15:03:50 +0000
+                    [response_body] => 
+                    [request_method] => GET
+                    [request_url] => https://api.telapi.com/v1/Accounts/{AccountSid}/Recordings/{RecordingSid}.json
+                    [request_variables] => 
+                    [response_headers] => 
+                    [uri] => /v1/Accounts/{AccountSid}/Notifications/{NotificationSid}.json
+                )
+
+        )
+
+)
+</pre>
+
+<hr><h2 id="transcriptions">Transcriptions</h2>   
+
+<h4 style="display:inline;">View Transcriptions</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/transcriptions/view/">Documentation</a><br>
+
+        <p>Request and print a transcription resource:</p>
+
+<pre class="prettyprint lang-php">
+$transcription = $telapi->get(array(
+    'transcriptions', '{TranscriptionSid}'
+));
+
+print_r($transcription->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [sid] => {TranscriptionSid}
+    [date_created] => Mon, 10 Sep 2012 18:28:54 +0000
+    [date_updated] => Mon, 10 Sep 2012 18:28:54 +0000
+    [account_sid] => {AccountSid}
+    [status] => in-progress
+    [type] => platinum
+    [audio_url] => http://foo.com/file.mp3
+    [duration] => 0
+    [transcription_text] => None
+    [api_version] => v1
+    [price] => 0.000000
+    [transcribe_callback] => 
+    [callback_method] => POST
+)
+</pre>
+
+<h4 style="display:inline;">List Transcriptions</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/transcriptions/list/">Documentation</a><br>
+
+        <p>Request and print a transcription list resource:</p>
+
+<pre class="prettyprint lang-php">
+$transcriptions = $telapi->get('transcriptions', array(
+    'PageSize' = '2'
+));
+
+print_r($transcriptions->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 32
+    [page_size] => 2
+    [total] => 65
+    [start] => 0
+    [end] => 1
+    [uri] => /v1/Accounts/{AccountSid}/Transcriptions.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Transcriptions.json?Page=0&amp;PageSize=2
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/Transcriptions.json?Page=1&amp;PageSize=2
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Transcriptions.json?Page=31&amp;PageSize=2
+    [transcriptions] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [sid] => {TranscriptionSid}
+                    [date_created] => Mon, 10 Sep 2012 18:28:54 +0000
+                    [date_updated] => Mon, 10 Sep 2012 18:28:54 +0000
+                    [account_sid] => {AccountSid}
+                    [status] => in-progress
+                    [type] => platinum
+                    [audio_url] => http://foo.com/file.mp3
+                    [duration] => 0
+                    [transcription_text] => None
+                    [api_version] => v1
+                    [price] => 0.000000
+                    [transcribe_callback] => 
+                    [callback_method] => POST
+                    [uri] => /v1/Accounts/{AccountSid}/Transcriptions/{TranscriptionSid}.json
+                )
+
+            [1] => stdClass Object
+                (
+                    [sid] => {TranscriptionSid}
+                    [date_created] => Thu, 6 Sep 2012 15:49:57 +0000
+                    [date_updated] => Thu, 6 Sep 2012 15:50:40 +0000
+                    [account_sid] => {AccountSid}
+                    [status] => completed
+                    [type] => auto
+                    [audio_url] => http://foo.com/file.mp3
+                    [duration] => 2
+                    [transcription_text] => This is a transcription.
+                    [api_version] => v1
+                    [price] => 0.050000
+                    [transcribe_callback] => 
+                    [callback_method] => POST
+                    [uri] => /v1/Accounts/{AccountSid}/Transcriptions/{TranscriptionSid}.json
+                )
+
+        )
+
+)
+</pre>
+
+<h4 style="display:inline;">Transcribe Recording</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/transcriptions/transcribe-recording/">Documentation</a><br>
+
+        <p>Transcribe recordings with the create method:</p>
+
+<pre class="prettyprint lang-php">
+$transcribe = $telapi->create(
+    array('recordings', '{RecordingSid}', 'transcribe'),
+    array({optionalParameters})
+);
+</pre>
+
+<h4 style="display:inline;">Transcribe Audio URL</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/transcriptions/transcribe-audio-url/">Documentation</a><br>
+
+        <p>Transcribe audio files located at external URLs with the create method:</p>
+
+<pre class="prettyprint lang-php">
+$transcription = $telapi->create( 'transcriptions', array( 
+    'AudioUrl' => '{fully_qualified_audio_url}' 
+));
+</pre>
+
+<hr><h2 id="carrier">Carrier Services</h2>   
+
+<h4 style="display:inline;">Carrier Lookup</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/carrier-services/carrier-lookup/">Documentation</a><br>
+
+        <p>Request and print a carrier lookup resource:</p>
+
+<pre class="prettyprint lang-php">
+$carrier_resource = $telapi->get('carrier', array(
+     'PhoneNumber' => '{valid_phone_number}'
+));
+
+print_r($carrier_resource->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 0
+    [page_size] => 100
+    [total] => 1
+    [start] => 0
+    [end] => 1
+    [uri] => /v1/Accounts/{AccountSid}/Carrier.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Carrier.json?Page=0&amp;PageSize=100
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/Carrier.json?Page=-1&amp;PageSize=100
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Carrier.json?Page=-1&amp;PageSize=100
+    [carrier_lookups] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [api_version] => v1
+                    [sid] => {LookupSid}
+                    [account_sid] => {AccountSid}
+                    [date_created] => Tue, 9 Oct 2012 16:32:54 +0000
+                    [date_updated] => Tue, 9 Oct 2012 16:32:54 +0000
+                    [phone_number] => +1735551234
+                    [carrier] => AT&amp;T Wireless
+                    [is_mobile] => 1
+                    [country] => 1
+                    [cic_code] => 155521
+                    [price] => 0.010000
+                    [uri] => /v1/Accounts/{AccountSid}/Carrier/{LookupSid}.json
+                )
+
+        )
+
+)
+</pre>
+
+<h4 style="display:inline;">CNAM (caller id) Lookup</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/carrier-services/cnam-lookup/">Documentation</a><br>
+
+        <p>Request and print a cnam lookup resource:</p>
+
+<pre class="prettyprint lang-php">
+$cnam_resource = $telapi->get('cnam', array(
+     'PhoneNumber' => '{valid_phone_number}'
+));
+
+print_r($cnam_resource->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 0
+    [page_size] => 100
+    [total] => 1
+    [start] => 0
+    [end] => 1
+    [uri] => /v1/Accounts/{AccountSid}/CNAM.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/CNAM.json?Page=0&amp;PageSize=100
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/CNAM.json?Page=-1&amp;PageSize=100
+    [last_page_uri] => /v1/Accounts/{AccountSid}/CNAM.json?Page=-1&amp;PageSize=100
+    [cnam_dips] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [api_version] => v1
+                    [sid] => {LookupSid}
+                    [account_sid] => {AccountSid}
+                    [date_created] => Tue, 9 Oct 2012 16:27:38 +0000
+                    [date_updated] => Tue, 9 Oct 2012 16:27:39 +0000
+                    [phone_number] => +17325551234
+                    [body] => JOHN SMITH
+                    [price] => 0.010000
+                    [uri] => /v1/Accounts/{AccountSid}/CNAM/{LookupSid}.json
+                )
+
+        )
+
+)
+</pre>
+
+<hr><h2 id="fraud">Fraud Control</h2>   
+
+<h4 style="display:inline;">List Fraud Control resources</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/fraud-control/list/">Documentation</a><br>
+
+        <p>Request and print a fraud control list resource:</p>
+
+<pre class="prettyprint lang-php">
+$fraud_resources = $telapi->get('fraud', array(
+     'PageSize' => '5'
+));
+
+print_r($fraud_resources->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 1
+    [page_size] => 5
+    [total] => 5
+    [start] => 0
+    [end] => 4
+    [uri] => /v1/Accounts/{AccountSid}/Fraud.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/Fraud.json?Page=0&amp;PageSize=5
+    [previous_page_uri] => 
+    [next_page_uri] => 
+    [last_page_uri] => /v1/Accounts/{AccountSid}/Fraud.json?Page=0&amp;PageSize=5
+    [frauds] => stdClass Object
+        (
+            [max_outbound_rate] => 0.400000
+            [destinations] => stdClass Object
+                (
+                    [blocked] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [country_name] => New Zealand
+                                    [country_code] => NZ
+                                    [country_prefix] => +64
+                                    [mobile_enabled] => True
+                                    [landline_enabled] => True
+                                    [sms_enabled] => True
+                                    [is_lock] => False
+                                    [date_created] => Thu, 16 Aug 2012 18:03:56 +0000
+                                    [date_updated] => Thu, 16 Aug 2012 18:03:56 +0000
+                                )
+
+                        )
+
+                    [authorized] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [country_name] => Belize
+                                    [country_code] => BZ
+                                    [country_prefix] => +501
+                                    [mobile_enabled] => True
+                                    [landline_enabled] => True
+                                    [sms_enabled] => True
+                                    [is_lock] => False
+                                    [date_created] => Thu, 30 Aug 2012 13:48:00 +0000
+                                    [date_updated] => Thu, 30 Aug 2012 13:48:27 +0000
+                                    [expiration_date] => Sat, 29 Sep 2012 13:48:27 +0000
+                                )
+
+                            [1] => stdClass Object
+                                (
+                                    [country_name] => Bahrain
+                                    [country_code] => BH
+                                    [country_prefix] => +973
+                                    [mobile_enabled] => True
+                                    [landline_enabled] => True
+                                    [sms_enabled] => True
+                                    [is_lock] => False
+                                    [date_created] => Thu, 30 Aug 2012 13:48:57 +0000
+                                    [date_updated] => Thu, 30 Aug 2012 13:49:15 +0000
+                                    [expiration_date] => Sat, 29 Sep 2012 13:49:15 +0000
+                                )
+
+                        )
+
+                    [whitelisted] => Array
+                        (
+                            [0] => stdClass Object
+                                (
+                                    [country_name] => Canada
+                                    [country_code] => CA
+                                    [country_prefix] => +1
+                                    [mobile_enabled] => True
+                                    [landline_enabled] => False
+                                    [sms_enabled] => False
+                                    [is_lock] => False
+                                    [date_created] => Mon, 30 Jul 2012 19:03:07 +0000
+                                    [date_updated] => Tue, 28 Aug 2012 20:28:09 +0000
+                                )
+
+                            [1] => stdClass Object
+                                (
+                                    [country_name] => United States
+                                    [country_code] => US
+                                    [country_prefix] => +1
+                                    [mobile_enabled] => True
+                                    [landline_enabled] => True
+                                    [sms_enabled] => True
+                                    [is_lock] => True
+                                    [date_created] => Thu, 16 Aug 2012 18:07:27 +0000
+                                    [date_updated] => Wed, 22 Aug 2012 19:26:13 +0000
+                                )
+
+                        )
+
+                )
+
+        )
+
+)
+</pre>    
+
+<h4 style="display:inline;">Authorize Destination</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/fraud-control/authorize/">Documentation</a><br>
+
+        <p>Authorize desctinations with the create method:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->create(
+    array( 'fraud', 'Authorize',  {CountryCode})
+);
+</pre>
+
+<h4 style="display:inline;">Extend Destination Authorization</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/fraud-control/extend/">Documentation</a><br>
+
+        <p>Extend desctination authorization with the create method:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->create(
+    array( 'fraud', 'Extend',  {CountryCode})
+);
+</pre> 
+
+<h4 style="display:inline;">Block Destination</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/fraud-control/block/">Documentation</a><br>
+
+        <p>Block desctinations with the create method:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->create(
+    array( 'fraud', 'Block',  {CountryCode})
+);
+</pre>
+
+<h4 style="display:inline;">Whitelist Destination</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/fraud-control/whitelist/">Documentation</a><br>
+
+        <p>Whitelist desctinations with the create method:</p>
+
+<pre class="prettyprint lang-php">
+$telapi->create(
+    array( 'fraud', 'Whitelist',  {CountryCode})
+);
+</pre>  
+
+
+      </div>
+
+      <div class="span-one-third">
+
+        <div style="position:fixed" id="tab-navi" style="margin-bottom:20px !important;">
+
+          <ul>
+            <li class="ui-state-default"><a href="https://github.com/mwmeyer/testing-pages/zipball/master">Download ZIP File &#187;</a></li>
+            <li class="ui-state-default"><a href="https://github.com/mwmeyer/testing-pages/tarball/master">Download TAR Ball &#187;</a></li>
+            <li class="ui-state-default"><a href="https://github.com/mwmeyer/testing-pages">View On GitHub &#187;</a></li>
+          </ul>
+
+                  <ul>
+                          <li class="ui-state-default">
+                              <a href="#inboundxml">InboundXML</a>
+                          </li> 
+
+                          <li class="ui-state-default">
+                              <a href="#rest-api">REST API</a>
+                          </li>                
+                                                          
+                          <li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#accounts">Accounts</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#sms">SMS</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#calls">Calls</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#conferences">Conferences</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#applications">Applications</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#ipn">Incoming Phone Numbers</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#available">Available Phone Numbers</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#recordings">Recordings</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#notifications">Notifications</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#transcriptions">Transcriptions</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#carrier">Carrier Services</a>
+                                      </li>
+                                      <li style="font-weight: normal;font-family:ProximaNovaRegular" class='ui-state-default'>
+                                          <a href="#fraud">Fraud Control</a>
+                                      </li>                                                                                                                                                                            
+                          </li> 
+     
+                  </ul>
+          </div>
+      </div>
+
     </div>
-    <script src="javascripts/scale.fix.js"></script>
+    </div>
     
   </body>
 </html>
