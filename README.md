@@ -3,7 +3,9 @@ telapi-php
 
 This PHP library is an open source tool built to simplify interaction with the [TelAPI](http://telapi.com) telephony platform. TelAPI makes adding voice and SMS to applications fun and easy.
 
-For more information about TelAPI, please visit:  [telapi.com/features](http://www.telapi.com/features) or [telapi.com/docs](http://www.telapi.com/docs)
+For this libraries full documentation visit: http://telapi.github.com/telapi-php
+
+For more information about TelAPI visit:  [telapi.com/features](http://www.telapi.com/features) or [telapi.com/docs](http://www.telapi.com/docs)
 
 ---
 
@@ -97,5 +99,9 @@ will render
 ```
 
 Just host that PHP file somewhere, buy a phone number in your [TelAPI Account Dashboard](https://www.telapi.com/dashboard/) and assign the URL of that PHP page to your new number. Whenever you dial that number, the InboundXML this page generates will be executed and you'll hear our text-to-speech engine say welcome.
+
+Documentation
+=============
+http://telapi.github.com/telapi-php
 
 ---
