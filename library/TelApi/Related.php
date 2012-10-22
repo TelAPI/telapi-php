@@ -313,7 +313,13 @@ abstract class TelApi_Related
             $return_params = '?';
             
             foreach($parameters as $parameter => $value) {
-                $return_params .= $parameter.'='.$value.'&';
+                if(is_array($value)) {
+                    foreach($value as $subvalue) {
+                        $return_params .= $parameter.'='.$subvalue.'&';
+                    }
+                } else {
+                    $return_params .= $parameter.'='.$value.'&';
+                }
             }
             
             $return_params = rtrim($return_params, '&');
@@ -334,7 +340,13 @@ abstract class TelApi_Related
         
         if(count($parameters) > 0) {
             foreach($parameters as $parameter => $value) {
-                $return_params .= $parameter.'='.urlencode($value).'&';
+                if(is_array($value)) {
+                    foreach($value as $subvalue) {
+                        $return_params .= $parameter.'='.urlencode($subvalue).'&';
+                    }
+                } else {
+                    $return_params .= $parameter.'='.urlencode($value).'&';
+                }
             }
             $return_params = rtrim($return_params, '&');
         }
