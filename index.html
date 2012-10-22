@@ -1810,6 +1810,14 @@ stdClass Object
 )
 </pre>
 
+        <p>To lookup more than one number at a time, pass the PhoneNumber value as an array: </p>
+
+<pre class="prettyprint lang-php">
+$telapi->get('carrier', array(
+     'PhoneNumber' => array('{lookup_#1}', '{lookup_#2}')
+));
+</pre> 
+
 <h4 style="display:inline;">CNAM (caller id) Lookup</h4>
 
         <a href="http://www.telapi.com/docs/api/rest/carrier-services/cnam-lookup/">Documentation</a><br>
@@ -1859,6 +1867,14 @@ stdClass Object
 
 )
 </pre>
+
+        <p>To lookup more than one number at a time, pass the PhoneNumber value as an array: </p>
+
+<pre class="prettyprint lang-php">
+$telapi->get('cnam', array(
+     'PhoneNumber' => array('{lookup_#1}', '{lookup_#2}')
+));
+</pre> 
 
 <hr><h2 id="fraud">Fraud Control</h2>   
 
