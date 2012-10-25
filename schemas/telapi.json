@@ -10,6 +10,7 @@
             "calls"                   : "Calls",
             "carrier"                 : "Carrier",
             "cnam"                    : "CNAM",
+            "bna"                    : "BNA",
             "incoming_phone_numbers"  : "IncomingPhoneNumbers",
             "available_phone_numbers" : "AvailablePhoneNumbers",
             "conferences"             : "Conferences",

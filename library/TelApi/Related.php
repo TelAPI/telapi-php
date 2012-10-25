@@ -78,6 +78,7 @@ abstract class TelApi_Related
         'incoming_phone_numbers'  => 'IncomingPhoneNumbers',
         'carrier'                 => 'Carrier',
         'cnam'                    => 'CNAM',
+        'bna'                    => 'BNA',
         'applications'            => 'Applications',
         'fraud'                   => 'Fraud',
         'usages'                  => 'Usages'
