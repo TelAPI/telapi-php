@@ -1757,11 +1757,11 @@ $transcription = $telapi->create( 'transcriptions', array(
 
 <hr><h2 id="carrier">Carrier Services</h2>   
 
-<h4 style="display:inline;">Carrier Lookup</h4>
+<h4 style="display:inline;">Carrier Look Up</h4>
 
         <a href="http://www.telapi.com/docs/api/rest/carrier-services/carrier-lookup/">Documentation</a><br>
 
-        <p>Request and print a carrier lookup resource:</p>
+        <p>Request and print a carrier look up resource:</p>
 
 <pre class="prettyprint lang-php">
 $carrier_resource = $telapi->get('carrier', array(
@@ -1810,7 +1810,7 @@ stdClass Object
 )
 </pre>
 
-        <p>To lookup more than one number at a time, pass the PhoneNumber value as an array: </p>
+        <p>To look up more than one number at a time, pass the PhoneNumber value as an array: </p>
 
 <pre class="prettyprint lang-php">
 $telapi->get('carrier', array(
@@ -1818,11 +1818,11 @@ $telapi->get('carrier', array(
 ));
 </pre> 
 
-<h4 style="display:inline;">CNAM (caller id) Lookup</h4>
+<h4 style="display:inline;">CNAM (caller id) Look Up</h4>
 
         <a href="http://www.telapi.com/docs/api/rest/carrier-services/cnam-lookup/">Documentation</a><br>
 
-        <p>Request and print a cnam lookup resource:</p>
+        <p>Request and print a cnam look up resource:</p>
 
 <pre class="prettyprint lang-php">
 $cnam_resource = $telapi->get('cnam', array(
@@ -1868,7 +1868,7 @@ stdClass Object
 )
 </pre>
 
-        <p>To lookup more than one number at a time, pass the PhoneNumber value as an array: </p>
+        <p>To look up more than one number at a time, pass the PhoneNumber value as an array: </p>
 
 <pre class="prettyprint lang-php">
 $telapi->get('cnam', array(
@@ -1876,6 +1876,69 @@ $telapi->get('cnam', array(
 ));
 </pre> 
 
+<h4 style="display:inline;">BNA (billing name address) Look Up</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/carrier-services/bna-lookup/">Documentation</a><br>
+
+        <p>Request and print a BNA look up resource:</p>
+
+<pre class="prettyprint lang-php">
+$bna_resource = $telapi->get('bna', array(
+     'PhoneNumber' => '{valid_phone_number}'
+));
+
+print_r($bna_resource->getResponse());
+</pre> 
+
+<p>print_r example output:</p>
+
+<pre>
+stdClass Object
+(
+    [page] => 0
+    [num_pages] => 0
+    [page_size] => 100
+    [total] => 1
+    [start] => 0
+    [end] => 1
+    [uri] => /v1/Accounts/{AccountSid}/BNA.json
+    [first_page_uri] => /v1/Accounts/{AccountSid}/BNA.json?Page=0&amp;PageSize=100
+    [previous_page_uri] => 
+    [next_page_uri] => /v1/Accounts/{AccountSid}/BNA.json?Page=-1&amp;PageSize=100
+    [last_page_uri] => /v1/Accounts/{AccountSid}/BNA.json?Page=-1&amp;PageSize=100
+    [bna_lookups] => Array
+        (
+            [0] => stdClass Object
+                (
+                    [api_version] => v1
+                    [sid] => {LookupSid}
+                    [account_sid] => {LookupSid}
+                    [date_created] => Thu, 25 Oct 2012 19:24:19 +0000
+                    [date_updated] => Thu, 25 Oct 2012 19:24:19 +0000
+                    [phone_number] => +1735551234
+                    [first_name] => Bob
+                    [last_name] => Randomness
+                    [address] => 123 East St
+                    [city] => Trenton
+                    [state] => NJ
+                    [zip_code] => 12345
+                    [country_code] => US
+                    [price] => 0.150000
+                    [uri] => /v1/Accounts/{AccountSid}/BNA/{LookupSid}
+                )
+
+        )
+
+)
+</pre>
+
+        <p>To look up more than one number at a time, pass the PhoneNumber value as an array: </p>
+
+<pre class="prettyprint lang-php">
+$telapi->get('bna', array(
+     'PhoneNumber' => array('{lookup_#1}', '{lookup_#2}')
+));
+</pre> 
 <hr><h2 id="fraud">Fraud Control</h2>   
 
 <h4 style="display:inline;">List Fraud Control resources</h4>
