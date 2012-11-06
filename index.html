@@ -625,6 +625,19 @@ stdClass Object
 )
 </pre>
 
+<h4 style="display:inline;">Interrupt Live Call</h4>
+
+        <a href="http://www.telapi.com/docs/api/rest/calls/interrupt/">Documentation</a><br>
+
+        <p>Use the update method along with a status parameter set to interrupt a call:</p>
+
+<pre class="prettyprint lang-php">
+$call = $telapi->update(
+    array( 'calls', '{CallSid}'), 
+    array( 'Url' => 'http://telapi.com/xml-redirect')
+);
+</pre>
+
 <h4 style="display:inline;">Hangup Call</h4>
 
         <a href="http://www.telapi.com/docs/api/rest/calls/hangup/">Documentation</a><br>
