@@ -70,13 +70,13 @@ echo $inbound_xml;
 /*
 &lt;?xml version="1.0"?&gt;
 &lt;Response&gt;
-&lt;Record action="http://foo-url.com/"/&gt;
+&lt;Record action="http://foo-url.com/"&gt;
 &lt;Say voice="man"&gt;hello!&lt;/Say&gt;
 &lt;/Response&gt;
 */
 </pre>
 
-<p>The elements can take two parameters: the first (or only) may be a string of text. If no string parameter is provided, the element will be output an empty-element tag, which is what is desired in the case of record. The second parameter (or only) parameter may be an array containing key value pairs to be used as element attributes. The example above demonstrates both these patterns.</p>
+<p>The elements can take two parameters: the first (or only) may be a string of text. If no string parameter is provided, the element will output an empty-element tag, which is what is desired in the case of record. The second parameter (or only) parameter may be an array containing key value pairs to be used as element attributes. The example above demonstrates both of these patterns.</p>
 
 <pre class="prettyprint lang-php">
 $inbound_xml = new TelApi_InboundXML();
@@ -92,14 +92,14 @@ echo $inbound_xml;
 /*
 &lt;?xml version="1.0"?&gt;
 &lt;Response&gt;
-&lt;Record action="http://foo-url.com/"/&gt;
+&lt;Record action="http://foo-url.com/"&gt;
 &lt;Say voice="man"&gt;hello!&lt;/Say&gt;
 &lt;Dial&gt;&lt;Conference&gt;ConfRoom&lt;/Conference>&lt;/Dial&gt;
 &lt;/Response&gt;
 */
 </pre>
 
-<p>The last design pattern to be aware of is used for nesting elements. To nest an element within another, just use pointer notation from the parent element to the nested element. This is demonstrated above by the code which outputs a conference element nested within a dial.</p>
+<p>The last design pattern to be aware of is used for nesting elements. To nest an element within another, just use pointer notation from the parent element to the nested element. This is demonstrated by the code above which outputs a conference element nested within a dial.</p>
 
         
         <hr><h1 id="rest-api">REST API</h1>
