@@ -100,8 +100,8 @@ will render
 
 Just host that PHP file somewhere, buy a phone number in your [TelAPI Account Dashboard](https://www.telapi.com/dashboard/) and assign the URL of that PHP page to your new number. Whenever you dial that number, the InboundXML this page generates will be executed and you'll hear our text-to-speech engine say welcome.
 
+---
+
 Documentation
 =============
 http://telapi.github.com/telapi-php
-
----
