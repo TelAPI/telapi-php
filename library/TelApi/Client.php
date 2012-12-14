@@ -54,8 +54,6 @@ class TelApi_Client extends TelApi_Related
 			'X-TELAPI-HELPER-TIMESTAMP'	=> time()
 		));
 		
-		$this->_isTokenValid($resource->client_token);
-		
 		$this->setToken($application_sid, $resource->client_token);
 		
 		return $resource->client_token;
@@ -71,10 +69,10 @@ class TelApi_Client extends TelApi_Related
 	 */
 	public function setToken($application_sid, $token) {
 		
-		# Check whenever application sid is correct
 		$this->_isApplication($application_sid);
 		
-		# Set the token regardless of it it exists or not
+		$this->_isTokenValid($token);
+		
 		$this->_clientToken[$application_sid] = $token;
 		
 		return true;
