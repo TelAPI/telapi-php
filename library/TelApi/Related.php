@@ -93,7 +93,13 @@ abstract class TelApi_Related
      */
     private $_component = null;
     
-
+    /**
+     * Client token. When generated, it will be "saved" here
+     * 
+     * @var array
+     */
+    protected $_clientToken = array();
+    
     
     /** *********** OPTION RELATED METHODS ************** **/
 
@@ -197,6 +203,18 @@ abstract class TelApi_Related
     function delete($component) {
         $creation_url = rtrim($this->_buildBaseUrl() . $this->_buildUrl($component, array()), '/') . '.' . self::WRAPPER_JSON;
         return new TelApi_Connector($this->_execute($creation_url, 'DELETE', ''), $this->option('response_to_array'), $this->_component);
+    }
+    
+    /** *********** CLIENT RELATED METHODS ************** **/
+    
+    
+    /**
+     * Return an instance of the TelAPI Client class
+     * 
+     * @return Class <TelApi_Client, self, NULL>
+     */
+    function getClient() {
+    	return TelApi_Client::getInstance();
     }
     
     
