@@ -76,6 +76,9 @@ class TelApi_InboundXML
      * @return SimpleXmlElement A SimpleXmlElement
      */
     public function __call($verb, array $args) {
+
+        /** convert verbs input like-this-one to LikeThisOne **/
+        $verb = preg_replace("/[-_]([a-z])/e", "ucfirst('\\1')", ucwords($verb));
         
         /** Let's first go check if the verb exists **/
         $this->_validateVerb(ucfirst($verb));

@@ -10,13 +10,13 @@
             "calls"                   : "Calls",
             "carrier"                 : "Carrier",
             "cnam"                    : "CNAM",
-            "bna"                    : "BNA",
+            "bna"                     : "BNA",
             "incoming_phone_numbers"  : "IncomingPhoneNumbers",
             "available_phone_numbers" : "AvailablePhoneNumbers",
             "conferences"             : "Conferences",
             "applications"            : "Applications",
-	    "fraud"                   : "Fraud",
-	    "usages"                  : "Usages"
+            "fraud"                   : "Fraud",
+            "usages"                  : "Usages"
         },
 
         "pagination" : [
@@ -34,9 +34,12 @@
                     "Say",
                     "Play",
                     "Gather",
+                    "GetSpeech",
                     "Record",
+                    "PlayLastRecording",
                     "Dial",
                     "Hangup",
+                    "Ping",
                     "Redirect",
                     "Reject",
                     "Pause",
@@ -48,7 +51,8 @@
             "Say": {
                 "attributes": [
                     "voice",
-                    "loop"
+                    "loop",
+                    "language"
                 ],
                 "nesting": [],
                 "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/say/",
@@ -95,6 +99,12 @@
                 "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/record/",
                 "blank": true
             },
+            "PlayLastRecording": {
+                "attributes": [],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/playlastrecording/",
+                "blank": true
+            },
             "GetSpeech": {
                 "attributes": [
                     "grammar", "action", "method", "timeout", "playBeep"
@@ -122,6 +132,7 @@
                     "straightToVm",
                     "heartbeatUrl",
                     "heartbeatMethod",
+                    "record",
                     "forwardedFrom"
                 ],
                 "nesting": [
@@ -176,6 +187,12 @@
                 "nesting": [],
                 "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/hangup/",
                 "blank": false
+            },
+            "Ping": {
+                "attributes": [],
+                "nesting": [],
+                "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/ping/",
+                "blank": true
             },
             "Redirect": {
                 "attributes": [
