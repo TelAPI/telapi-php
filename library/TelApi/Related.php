@@ -83,8 +83,7 @@ abstract class TelApi_Related
         'fraud'                   => 'Fraud',
         'usages'                  => 'Usages',
     	'rates'                   => 'Rates',
-		'connect'                 => 'Connect',
-		'connect_permissions'     => 'ConnectPermissions'
+		'connect'                 => 'Connect'
     );
     
     

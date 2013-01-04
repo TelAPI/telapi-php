@@ -18,8 +18,7 @@
             "fraud"                   : "Fraud",
             "usages"                  : "Usages",
             "rates"                   : "Rates",
-            "connect"                 : "Connect",
-            "connect_permissions"     : "ConnectPermissions"
+            "connect"                 : "Connect"
         },
 
         "pagination" : [
