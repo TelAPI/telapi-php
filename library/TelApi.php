@@ -29,6 +29,9 @@ require_once 'TelApi/Related.php';
 /** @see TelApi_Client **/
 require_once 'TelApi/Client.php';
 
+/** @see TelApi_Client **/
+require_once 'TelApi/Connect.php';
+
 /**
  * 
  * TelAPI singleton instance to the wrapper

@@ -16,7 +16,10 @@
             "conferences"             : "Conferences",
             "applications"            : "Applications",
             "fraud"                   : "Fraud",
-            "usages"                  : "Usages"
+            "usages"                  : "Usages",
+            "rates"                   : "Rates",
+            "connect"                 : "Connect",
+            "connect_permissions"     : "ConnectPermissions"
         },
 
         "pagination" : [

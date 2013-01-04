@@ -81,7 +81,10 @@ abstract class TelApi_Related
         'bna'                    => 'BNA',
         'applications'            => 'Applications',
         'fraud'                   => 'Fraud',
-        'usages'                  => 'Usages'
+        'usages'                  => 'Usages',
+    	'rates'                   => 'Rates',
+		'connect'                 => 'Connect',
+		'connect_permissions'     => 'ConnectPermissions'
     );
     
     
@@ -99,6 +102,14 @@ abstract class TelApi_Related
      * @var array
      */
     protected $_clientToken = array();
+    
+    
+    /**
+     * Generated headers (credentials) which came from successful authorisation
+     *
+     * @var array
+     */
+    protected static $_connectHeaders = array();
     
     
     /** *********** OPTION RELATED METHODS ************** **/
@@ -217,6 +228,14 @@ abstract class TelApi_Related
     	return TelApi_Client::getInstance();
     }
     
+    /**
+     * Return an instance of the TelAPI Connect class
+     *
+     * @return Class <TelApi_Connect, self, NULL>
+     */
+    function getConnect() {
+    	return TelApi_Connect::getInstance();
+    }
     
     /** *********** INTERNAL METHODS ************** **/
     
@@ -389,10 +408,13 @@ abstract class TelApi_Related
         $auth_token  = $this->option('auth_token');
         $response    = array();
         
+        if(substr($url, 0, 4) == 'http') $curl_port = 80;
+        if(substr($url, 0, 5) == 'https') $curl_port = 443;
+        
         if($resource = curl_init()) {
             $curl_opts = array(
                 CURLOPT_URL            => $url,
-                CURLOPT_PORT           => 443,
+                CURLOPT_PORT           => $curl_port,
                 CURLOPT_HEADER         => FALSE,
                 CURLOPT_RETURNTRANSFER => TRUE,
                 CURLOPT_TIMEOUT        => 0,
@@ -407,6 +429,12 @@ abstract class TelApi_Related
             if($type == 'POST') {
                 $curl_opts[CURLOPT_POST] = 1;
                 $curl_opts[CURLOPT_POSTFIELDS] = $params;
+            }
+            
+            if($this->getConnect()->getStatus() === true) {
+	            if(count(self::$_connectHeaders) > 0) {
+	            	$curl_opts[CURLOPT_HTTPHEADER] = self::$_connectHeaders;
+	            }
             }
             
             if(curl_setopt_array($resource, $curl_opts)) {
