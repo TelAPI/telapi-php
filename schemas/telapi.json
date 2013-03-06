@@ -1,5 +1,5 @@
 {
-    "version" : "0.0.3",
+    "version" : "0.0.4",
     "rest_api" : {
         "components" : {
             "accounts"                : "Accounts",
@@ -18,7 +18,8 @@
             "fraud"                   : "Fraud",
             "usages"                  : "Usages",
             "rates"                   : "Rates",
-            "connect"                 : "Connect"
+            "connect"                 : "Connect",
+            "faxes"                   : "Faxes"
         },
 
         "pagination" : [
@@ -93,9 +94,11 @@
                     "maxLength",
                     "transcribe",
                     "transcribeCallback",
+                    "transcribeQuality",
                     "playBeep",
                     "direction",
-                    "fileFormat"
+                    "fileFormat",
+                    "background"
                 ],
                 "nesting": [],
                 "docs_url": "http: //www.telapi.com/docs/api/inboundxml/voice/record/",
@@ -134,8 +137,10 @@
                     "straightToVm",
                     "heartbeatUrl",
                     "heartbeatMethod",
-                    "record",
-                    "forwardedFrom"
+                    "forwardedFrom",
+                    "ifMachine",
+                    "ifMachineUrl",
+                    "ifMachineMethod"
                 ],
                 "nesting": [
                     "Number",

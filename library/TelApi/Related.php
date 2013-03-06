@@ -78,12 +78,13 @@ abstract class TelApi_Related
         'incoming_phone_numbers'  => 'IncomingPhoneNumbers',
         'carrier'                 => 'Carrier',
         'cnam'                    => 'CNAM',
-        'bna'                    => 'BNA',
+        'bna'                     => 'BNA',
         'applications'            => 'Applications',
         'fraud'                   => 'Fraud',
         'usages'                  => 'Usages',
     	'rates'                   => 'Rates',
-		'connect'                 => 'Connect'
+		'connect'                 => 'Connect',
+        'faxes'                   => 'Faxes'
     );
     
     
