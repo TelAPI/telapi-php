@@ -50,7 +50,7 @@ class TelApi_Client extends TelApi_Related
 	 * @param  Boolean $force_regenerate     If true, regardless of the existing token, it will be regenerated
 	 * @return Ambigous <string, multitype:>
 	 */
-	public function generateCredentials($application_sid, $force_regenerate=false) {
+	public function generateToken($application_sid, $force_regenerate=false) {
 		
 		$this->_isApplication($application_sid);
 		
