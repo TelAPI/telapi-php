@@ -17,11 +17,19 @@
 
 class TelApi_Client extends TelApi_Related
 {
+	
 	/**
 	 * Singleton instance container
 	 * @var self|null
 	 */
 	protected static $_instance = null;
+
+	/**
+	 * All available resources sorted by a application sids. This is used to for example
+	 * figure out client_password.
+	 * @var array
+	 */
+	protected static $_resource = array();
 	
 	/**
      * Singleton access method to TelAPI. This is THE ONLY PROPER WAY to
@@ -42,7 +50,7 @@ class TelApi_Client extends TelApi_Related
 	 * @param  Boolean $force_regenerate     If true, regardless of the existing token, it will be regenerated
 	 * @return Ambigous <string, multitype:>
 	 */
-	public function generateToken($application_sid, $force_regenerate=false) {
+	public function generateCredentials($application_sid, $force_regenerate=false) {
 		
 		$this->_isApplication($application_sid);
 		
@@ -54,9 +62,11 @@ class TelApi_Client extends TelApi_Related
 			'X-TELAPI-HELPER-TIMESTAMP'	=> time()
 		));
 		
-		$this->setToken($application_sid, $resource->client_token);
+		self::$_resource[$application_sid] = $resource;
 		
-		return $resource->client_token;
+		$this->setToken($application_sid, $resource->sdk_token);
+		
+		return $resource;
 	}
 	
 	
@@ -73,7 +83,7 @@ class TelApi_Client extends TelApi_Related
 		
 		$this->_isTokenValid($token);
 		
-		$this->_clientToken[$application_sid] = $token;
+		$this->_sdkToken[$application_sid] = $token;
 		
 		return true;
 	}
@@ -89,9 +99,23 @@ class TelApi_Client extends TelApi_Related
 
 		$this->_isApplication($application_sid);
 		
-		return isset($this->_clientToken[$application_sid]) ? $this->_clientToken[$application_sid] : null;
+		return isset($this->_sdkToken[$application_sid]) ? $this->_sdkToken[$application_sid] : null;
 	}
 	
+
+	public function getPassword($application_sid) {
+
+		$this->_isApplication($application_sid);
+
+		if( array_key_exists($application_sid, self::$_resource) ) {
+			if( @self::$_resource[$application_sid]->sdk_password ) {
+				return self::$_resource[$application_sid]->sdk_password;
+			}
+		}
+
+		return null;
+	}
+
 	
 	/**
 	 * Return whenever token is generated and is set within the class.
@@ -104,6 +128,11 @@ class TelApi_Client extends TelApi_Related
 		$this->_isApplication($application_sid);
 		
 		return $this->getToken($application_sid) ? true : false;
+	}
+
+
+	public function passwordExists($application_sid) {
+		$this->_isApplication($application_sid);
 	}
 	
 	
@@ -122,12 +151,12 @@ class TelApi_Client extends TelApi_Related
 	/**
 	 * Check if Application Token is valid when received
 	 * 
-	 * @param  String  $client_token
+	 * @param  String  $sdk_token
 	 * @throws TelApi_Exception
 	 * @return boolean
 	 */
-	private function _isTokenValid($client_token) {
-		if(is_null($client_token) || strlen($client_token) < 20) {
+	private function _isTokenValid($sdk_token) {
+		if(is_null($sdk_token) || strlen($sdk_token) < 20) {
 			throw new TelApi_Exception("Specified TelAPI Application Client token is not valid!");
 		}
 		

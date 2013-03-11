@@ -27,7 +27,7 @@ require_once 'TelApi/Connector.php';
 require_once 'TelApi/Related.php';
 
 /** @see TelApi_Client **/
-require_once 'TelApi/Client.php';
+require_once 'TelApi/Sdk.php';
 
 /** @see TelApi_Client **/
 require_once 'TelApi/Connect.php';
