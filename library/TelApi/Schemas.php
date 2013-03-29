@@ -62,23 +62,31 @@ class TelApi_Schemas
             $schema_file = realpath(dirname(dirname(dirname(__FILE__)))) . self::TELAPI_SCHEMA_FILE;
             $json_schema = file_get_contents($schema_file);
 
+            $error = ''; 
+
             $result = json_decode(trim($json_schema), false);
-            switch(json_last_error()) {
-                case JSON_ERROR_DEPTH:
-                    $error =  ' - Maximum stack depth exceeded';
-                    break;
-                case JSON_ERROR_CTRL_CHAR:
-                    $error = ' - Unexpected control character found';
-                    break;
-                case JSON_ERROR_STATE_MISMATCH:
-                    $error  = ' - Invalid or Malformed JSON';
-                    break;
-                case JSON_ERROR_SYNTAX:
-                    $error = ' - Syntax error, malformed JSON';
-                    break;
-                case JSON_ERROR_NONE:
-                default:
-                    $error = '';              
+            
+
+            if (version_compare(PHP_VERSION, '5.3.0') >= 0) {
+
+                switch(json_last_error()) {
+                    case JSON_ERROR_DEPTH:
+                        $error =  ' - Maximum stack depth exceeded';
+                        break;
+                    case JSON_ERROR_CTRL_CHAR:
+                        $error = ' - Unexpected control character found';
+                        break;
+                    case JSON_ERROR_STATE_MISMATCH:
+                        $error  = ' - Invalid or Malformed JSON';
+                        break;
+                    case JSON_ERROR_SYNTAX:
+                        $error = ' - Syntax error, malformed JSON';
+                        break;
+                    case JSON_ERROR_NONE:
+                    default:
+                        $error = '';              
+                }
+
             }
 
             if (!empty($error)) throw new TelApi_Exception('JSON SCHEMA Error: '.$error);
