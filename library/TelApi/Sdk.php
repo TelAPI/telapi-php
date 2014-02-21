@@ -57,14 +57,14 @@ class TelApi_Client extends TelApi_Related
 		# In case that token already exists and force_regenerate is false
 		if($this->tokenExists($application_sid) && !$force_regenerate) return $this->getToken($application_sid);
 		
-		$resource = $this->create(array('Applications', $application_sid, 'GenerateToken'), array(
+		$resource = $this->create(array('Applications', $application_sid, 'Clients', 'Tokens'), array(
 			'X-TELAPI-HELPER'           => 'PHP',
 			'X-TELAPI-HELPER-TIMESTAMP'	=> time()
 		));
-		
+
 		self::$_resource[$application_sid] = $resource;
 		
-		$this->setToken($application_sid, $resource->sdk_token);
+		$this->setToken($application_sid, $resource->sid);
 		
 		return $resource;
 	}
@@ -108,8 +108,8 @@ class TelApi_Client extends TelApi_Related
 		$this->_isApplication($application_sid);
 
 		if( array_key_exists($application_sid, self::$_resource) ) {
-			if( @self::$_resource[$application_sid]->sdk_password ) {
-				return self::$_resource[$application_sid]->sdk_password;
+			if( @self::$_resource[$application_sid]->client_password ) {
+				return self::$_resource[$application_sid]->client_password;
 			}
 		}
 
@@ -149,15 +149,15 @@ class TelApi_Client extends TelApi_Related
 	}
 	
 	/**
-	 * Check if Application Token is valid when received
+	 * Check if Application client sid is valid when received
 	 * 
-	 * @param  String  $sdk_token
+	 * @param  String  $client_sid
 	 * @throws TelApi_Exception
 	 * @return boolean
 	 */
-	private function _isTokenValid($sdk_token) {
-		if(is_null($sdk_token) || strlen($sdk_token) < 20) {
-			throw new TelApi_Exception("Specified TelAPI Application Client token is not valid!");
+	private function _isTokenValid($client_sid) {
+		if(is_null($client_sid) || strlen($client_sid) < 20) {
+			throw new TelApi_Exception("Specified TelAPI Application client sid is not valid!");
 		}
 		
 		return true;
