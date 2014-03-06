@@ -50,7 +50,7 @@ class TelApi_Client extends TelApi_Related
 	 * @param  Boolean $force_regenerate     If true, regardless of the existing token, it will be regenerated
 	 * @return Ambigous <string, multitype:>
 	 */
-	public function generateToken($application_sid, $force_regenerate=false) {
+	public function generateToken($application_sid,$client_nickname, $force_regenerate=false) {
 		
 		$this->_isApplication($application_sid);
 		
@@ -58,6 +58,7 @@ class TelApi_Client extends TelApi_Related
 		if($this->tokenExists($application_sid) && !$force_regenerate) return $this->getToken($application_sid);
 		
 		$resource = $this->create(array('Applications', $application_sid, 'Clients', 'Tokens'), array(
+			'Nickname'					=> $client_nickname,
 			'X-TELAPI-HELPER'           => 'PHP',
 			'X-TELAPI-HELPER-TIMESTAMP'	=> time()
 		));
